@@ -26,7 +26,7 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
         className="relative rounded-3xl overflow-hidden border-4 border-gold-500/80 bg-black shadow-[0_0_45px_rgba(212,175,55,0.45)] flex items-center justify-center shrink-0 animate-video-entrance"
         style={{
           aspectRatio: '9 / 16',
-          height: 'min(74vh, 560px)',
+          height: 'min(62svh, 500px)',
           width: 'auto',
           maxWidth: 'calc(100vw - 24px)',
         }}
