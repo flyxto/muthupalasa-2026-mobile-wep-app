@@ -185,9 +185,9 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
         
         {/* Registered Phone Number displayed under Outlet Name if present */}
         {user.phoneNumber && (
-          <div className="flex items-center justify-center gap-1 text-[clamp(0.62rem,1.4vh,0.72rem)] text-gold-400/80 font-mono font-medium pt-0.5">
+          <div className="flex items-center justify-center gap-1 text-[clamp(0.62rem,1.4vh,0.72rem)] text-gold-400/80 font-mono font-medium pt-0.5 select-none">
             <Phone className="w-3 h-3 text-gold-500" />
-            <span>Phone: {user.phoneNumber}</span>
+            <span className="select-none">Phone: {user.phoneNumber}</span>
           </div>
         )}
 
