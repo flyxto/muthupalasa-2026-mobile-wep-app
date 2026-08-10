@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { FlowStep, Language, UserProfile, InvitationDocument } from '@/types/flow';
+import { usePathname } from 'next/navigation';
+import { FlowStep, Language, UserProfile, InvitationDocument, ClubType } from '@/types/flow';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { UserDetailsView } from '@/components/UserDetailsView';
 import { EmergencyContactModal } from '@/components/EmergencyContactModal';
@@ -20,9 +21,35 @@ const PARTICLES = Array.from({ length: 45 }, (_, i) => ({
 
 interface MainFlowProps {
   goldenPass?: string;
+  clubType?: ClubType;
 }
 
-export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
+const getFrameImage = (club: ClubType): string => {
+  if (club === 'starclub') return '/sc-frame.png';
+  // Both 'mp' and 'dmart' use '/mp-dm-frame.png'
+  return '/mp-dm-frame.png';
+};
+
+const getLogoImage = (club: ClubType): string => {
+  if (club === 'dmart') return '/dm.png';
+  if (club === 'starclub') return '/sc.png';
+  return '/mp-logo.png';
+};
+
+export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
+  const pathname = usePathname();
+
+  // Determine active club type dynamically from prop or URL pathname
+  let activeClub: ClubType = clubType || 'mp';
+  if (pathname) {
+    if (pathname.includes('/dmart')) activeClub = 'dmart';
+    else if (pathname.includes('/starclub')) activeClub = 'starclub';
+    else if (pathname.includes('/mp')) activeClub = 'mp';
+  }
+
+  const frameImageSrc = getFrameImage(activeClub);
+  const logoImageSrc = getLogoImage(activeClub);
+
   const [step, setStep] = useState<FlowStep>('language');
   const [language, setLanguage] = useState<Language>('en');
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
@@ -153,12 +180,12 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
 
   return (
     <div className="min-h-svh max-h-svh h-svh bg-navy-800 text-gold-400 font-sans px-4 sm:px-6 py-3 relative overflow-hidden flex flex-col items-center justify-between select-none">
-      {/* Background Frame Overlay */}
+      {/* Dynamic Background Frame Overlay */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/frame.png"
+        src={frameImageSrc}
         alt="Background Frame"
-        className="fixed inset-0 w-full h-full object-fill pointer-events-none z-0 opacity-90"
+        className="fixed inset-0 w-full h-full object-fill pointer-events-none z-0 opacity-90 transition-all duration-300"
       />
 
       {/* Floating Golden Particles Overlay */}
@@ -181,13 +208,13 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
 
       {/* Top Header Bar */}
       <div className="w-full max-w-md mx-auto relative flex items-center justify-end pt-1 px-1 z-10 shrink-0">
-        {/* Absolutely Positioned Top Center Logo */}
+        {/* Absolutely Positioned Dynamic Top Center Logo */}
         <div className="absolute left-1/2 -translate-x-1/2 top-7 sm:top-9 pointer-events-none z-10 flex justify-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/mp-logo.png"
+            src={logoImageSrc}
             alt="Muthupalasa Logo"
-            className="h-28 sm:h-36 md:h-44 w-auto max-w-[80vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)]"
+            className="h-28 sm:h-36 md:h-44 w-auto max-w-[80vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
           />
         </div>
 

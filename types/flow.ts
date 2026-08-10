@@ -2,6 +2,8 @@ export type Language = 'en' | 'si';
 
 export type FlowStep = 'language' | 'details' | 'video' | 'thankyou';
 
+export type ClubType = 'mp' | 'dmart' | 'starclub';
+
 export interface InvitationDocument {
   _id?: string;
   "LOYALTY CLUB"?: string;
