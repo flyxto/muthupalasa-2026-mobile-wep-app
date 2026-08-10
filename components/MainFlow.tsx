@@ -108,7 +108,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         setUser({
           name: doc["OWNER'S NAME"] || doc["BP Name"] || 'Valued Guest',
           outletName: doc["OUTLET NAME"] || 'Exclusive Outlet',
-          code: doc["BP Code"] || doc["GOLDEN PASS"] || passNumber,
+          code: doc["Outlet Code"] || doc["BP Code"] || doc["GOLDEN PASS"] || passNumber,
           photo: (doc["image url"] && doc["image url"].trim().length > 0) ? doc["image url"].trim() : '/avatar.png',
           phoneNumber: rawPhone,
           whatsappNumber: whatsappNum,
