@@ -28,7 +28,7 @@ export const ThankYouView: React.FC<ThankYouViewProps> = ({ language }) => {
 
       {/* Thank You Header */}
       <div className="space-y-2">
-        <h1 className="font-title text-4xl sm:text-5xl font-extrabold tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 drop-shadow-[0_4px_20px_rgba(212,175,55,0.4)]">
+        <h1 className="font-title text-2xl sm:text-3xl font-extrabold tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 drop-shadow-[0_4px_20px_rgba(212,175,55,0.4)]">
           {t.thankYouTitle}
         </h1>
         <p className="text-sm sm:text-base text-gold-400/90 font-medium leading-relaxed max-w-xs mx-auto">
