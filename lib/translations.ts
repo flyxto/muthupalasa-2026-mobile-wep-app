@@ -10,13 +10,12 @@ export interface TranslationDictionary {
   shopCode: string;
   readOnlyBadge: string;
   phoneNumber: string;
-  enterPhonePlaceholder: string;
+  whatsappNumber: string;
+  enterWhatsappPlaceholder: string;
   confirmButton: string;
-  editDetailsButton: string;
-  editModalTitle: string;
-  editPhotoLabel: string;
-  saveChanges: string;
-  cancel: string;
+  emergencyContactButton: string;
+  emergencyModalTitle: string;
+  emergencyModalSubtitle: string;
   phoneRequiredErr: string;
   stepLanguage: string;
   stepDetails: string;
@@ -25,6 +24,7 @@ export interface TranslationDictionary {
   thankYouSubtitle: string;
   joinWhatsappButton: string;
   skipVideo: string;
+  uploadPhoto: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -37,15 +37,14 @@ export const translations: Record<Language, TranslationDictionary> = {
     outletName: 'Outlet Name',
     shopCode: 'Outlet Code',
     readOnlyBadge: 'Locked',
-    phoneNumber: 'Phone Number',
-    enterPhonePlaceholder: '07X XXX XXXX',
+    phoneNumber: 'Phone',
+    whatsappNumber: 'WhatsApp Number',
+    enterWhatsappPlaceholder: 'Enter WhatsApp number (07X XXX XXXX)...',
     confirmButton: 'Confirm',
-    editDetailsButton: 'Edit Details',
-    editModalTitle: 'Edit Details',
-    editPhotoLabel: 'Photo',
-    saveChanges: 'Save',
-    cancel: 'Cancel',
-    phoneRequiredErr: 'Enter a valid phone number',
+    emergencyContactButton: 'Emergency Contact',
+    emergencyModalTitle: 'Emergency Contacts',
+    emergencyModalSubtitle: 'Need urgent assistance? Contact our team directly:',
+    phoneRequiredErr: 'Enter a valid 10-digit WhatsApp number starting with 07',
     stepLanguage: 'Language',
     stepDetails: 'Details',
     stepThankYou: 'Video',
@@ -53,6 +52,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     thankYouSubtitle: 'Thank you for your confirmation. Stay updated by joining our official WhatsApp Channel.',
     joinWhatsappButton: 'Join Our WhatsApp Channel',
     skipVideo: 'Skip',
+    uploadPhoto: 'Upload Photo',
   },
   si: {
     appTitle: 'මුතුපලස',
@@ -63,21 +63,21 @@ export const translations: Record<Language, TranslationDictionary> = {
     outletName: 'කඩයේ නම',
     shopCode: 'අවුට්ලෙට් කේතය',
     readOnlyBadge: 'වෙනස් කළ නොහැක',
-    phoneNumber: 'දුරකථන අංකය',
-    enterPhonePlaceholder: '07X XXX XXXX',
+    phoneNumber: 'දුරකථනය',
+    whatsappNumber: 'WhatsApp අංකය',
+    enterWhatsappPlaceholder: 'WhatsApp අංකය ඇතුළත් කරන්න (07X XXX XXXX)...',
     confirmButton: 'තහවුරු කරන්න',
-    editDetailsButton: 'විස්තර සංස්කරණය',
-    editModalTitle: 'විස්තර සංස්කරණය',
-    editPhotoLabel: 'ඡායාරූපය',
-    saveChanges: 'සුරකින්න',
-    cancel: 'අවලංගු කරන්න',
-    phoneRequiredErr: 'දුරකථන අංකය ඇතුළත් කරන්න',
+    emergencyContactButton: 'හදිසි ඇමතුම් / Emergency Contact',
+    emergencyModalTitle: 'හදිසි ඇමතුම් සේවාව',
+    emergencyModalSubtitle: 'ඔබට හදිසි සහයක් අවශ්‍යද? අපගේ කණ්ඩායම අමතන්න:',
+    phoneRequiredErr: 'අංක 10කින් යුත් නිවැරදි 07X WhatsApp අංකයක් ඇතුළත් කරන්න',
     stepLanguage: 'භාෂාව',
     stepDetails: 'විස්තර',
     stepThankYou: 'වීඩියෝව',
     thankYouTitle: 'ස්තූතියි!',
     thankYouSubtitle: 'ඔබගේ තහවුරු කිරීමට ස්තූතියි. අපගේ නිල WhatsApp චැනලයට එකතු වී අලුත්ම තොරතුරු ලබාගන්න.',
-    joinWhatsappButton: 'Join Our WhatsApp Channel',
+    joinWhatsappButton: 'WhatsApp චැනලයට එකතු වන්න',
     skipVideo: 'මගහරින්න',
+    uploadPhoto: 'ඡායාරූපයක් එක් කරන්න',
   },
 };
