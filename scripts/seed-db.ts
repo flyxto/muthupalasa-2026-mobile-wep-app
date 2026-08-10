@@ -29,7 +29,11 @@ async function seedDatabase() {
 
     console.log(`📌 Target DB: "${DB_NAME}", Collection: "${COLLECTION_NAME}"`);
 
-    // Insert records into collection
+    // Wipe existing records in collection to replace with fresh seed data
+    const deleteResult = await collection.deleteMany({});
+    console.log(`🗑️ Cleared ${deleteResult.deletedCount} existing documents from "${COLLECTION_NAME}"`);
+
+    // Insert fresh records into collection
     const result = await collection.insertMany(documents);
     console.log(`✅ Successfully seeded ${result.insertedCount} documents into collection "${COLLECTION_NAME}"!`);
 

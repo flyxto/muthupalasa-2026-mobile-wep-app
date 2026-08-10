@@ -9,7 +9,7 @@ import { AlreadyRegisteredView } from '@/components/AlreadyRegisteredView';
 import { EmergencyContactModal } from '@/components/EmergencyContactModal';
 import { VideoThankYouView } from '@/components/VideoThankYouView';
 import { ThankYouView } from '@/components/ThankYouView';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 
 const PARTICLES = Array.from({ length: 45 }, (_, i) => ({
   id: i,
@@ -25,7 +25,9 @@ interface MainFlowProps {
   clubType?: ClubType;
 }
 
-const getFrameImage = (club: ClubType): string => {
+const getFrameImage = (club: ClubType, is17th: boolean): string => {
+  // If date is 17th August, always show '/mp-dm-frame.png'
+  if (is17th) return '/mp-dm-frame.png';
   if (club === 'starclub') return '/sc-frame.png';
   return '/mp-dm-frame.png';
 };
@@ -47,9 +49,6 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
     else if (pathname.includes('/mp')) activeClub = 'mp';
   }
 
-  const frameImageSrc = getFrameImage(activeClub);
-  const logoImageSrc = getLogoImage(activeClub);
-
   const [step, setStep] = useState<FlowStep>('language');
   const [language, setLanguage] = useState<Language>('en');
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
@@ -70,6 +69,17 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
     phoneNumber: '',
     whatsappNumber: '',
   });
+
+  // Check if object date is 17th August (case-insensitive check)
+  const rawDate = (user.rawInvitation?.["DATE"] || '').toString().toLowerCase().trim();
+  const is17thAugust = rawDate.includes('17th aug') || rawDate.includes('17th august') || rawDate.includes('17 aug') || rawDate.includes('17 august');
+
+  // Dynamic frame image selection (if date is 17th, force '/mp-dm-frame.png')
+  const frameImageSrc = getFrameImage(activeClub, is17thAugust);
+  const logoImageSrc = getLogoImage(activeClub);
+
+  // Check if invitation data and date check are fully ready
+  const isDataReady = goldenPass ? (!isLoading && user.rawInvitation !== undefined) : true;
 
   // Reusable function to fetch/refetch invitation data from MongoDB without page refresh
   const fetchInvitationData = useCallback(async (passNumber: string) => {
@@ -186,7 +196,18 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
   };
 
   return (
-    <div className="min-h-svh max-h-svh h-svh bg-navy-800 text-gold-400 font-sans px-4 sm:px-6 py-3 relative overflow-hidden flex flex-col items-center justify-between select-none">
+    <div className="min-h-svh max-h-svh h-svh bg-navy-800 text-gold-400 font-sans px-3 sm:px-6 py-2 sm:py-3 relative overflow-hidden flex flex-col items-center justify-between select-none">
+      
+      {/* Blurred Fullscreen Overlay Loader until frame and logos load */}
+      {goldenPass && !isDataReady && !fetchError && (
+        <div className="fixed inset-0 z-50 bg-navy-950/85 backdrop-blur-lg flex flex-col items-center justify-center gap-3 animate-in fade-in duration-200">
+          <Loader2 className="w-10 h-10 animate-spin text-gold-400 drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+          <p className="text-xs font-extrabold uppercase tracking-widest text-gold-400/90 animate-pulse">
+            Loading...
+          </p>
+        </div>
+      )}
+
       {/* Dynamic Background Frame Overlay */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -213,42 +234,52 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         ))}
       </div>
 
-      {/* Top Header Bar */}
-      <div className="w-full max-w-md mx-auto relative flex items-center justify-end pt-1 px-1 z-10 shrink-0">
-        {/* Absolutely Positioned Dynamic Top Center Logo */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-7 sm:top-9 pointer-events-none z-10 flex justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={logoImageSrc}
-            alt="Muthupalasa Logo"
-            className="h-28 sm:h-36 md:h-44 w-auto max-w-[80vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
-          />
-        </div>
+      {/* Dark Blue Bottom-to-Top Backdrop Gradient in Details View (above knight-2.png at z-[5], below content at z-10) */}
+      {step === 'details' && !isAlreadyRegistered && (
+        <div
+          className="fixed inset-x-0 bottom-0 h-[65vh] pointer-events-none z-[6] transition-opacity duration-500"
+          style={{
+            background: 'linear-gradient(to top, #030e1f 0%, rgba(3, 14, 31, 0.95) 40%, rgba(3, 14, 31, 0.7) 70%, rgba(3, 14, 31, 0) 100%)',
+          }}
+        />
+      )}
 
-        {/* 3-Dot Step Bar (hidden if already registered) */}
-        {!isAlreadyRegistered && (
-          <div className="flex items-center gap-1.5 z-20">
-            <div
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                step === 'language' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
-              }`}
-            />
-            <div
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                step === 'details' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
-              }`}
-            />
-            <div
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                step === 'video' || step === 'thankyou' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
-              }`}
-            />
-          </div>
-        )}
+      {/* Top Header Bar */}
+      <div className="w-full max-w-md mx-auto relative flex items-center justify-end pt-1 px-1 z-10 shrink-0 min-h-[4rem] sm:min-h-[5rem]">
+        {/* Absolutely Positioned Dynamic Top Center Logo */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-4 sm:top-8 pointer-events-none z-10 flex items-center justify-center gap-2 sm:gap-3 max-w-[90vw]">
+          {isDataReady && (
+            <div className="flex items-center justify-center gap-2 sm:gap-3 animate-in fade-in zoom-in-95 slide-in-from-top-3 duration-500 ease-out">
+              {is17thAugust ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/mp-logo.png"
+                    alt="Muthupalasa Logo"
+                    className="h-[8.5vh] max-h-24 min-h-[44px] w-auto max-w-[38vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/dm.png"
+                    alt="D-Mart Logo"
+                    className="h-[8.5vh] max-h-24 min-h-[44px] w-auto max-w-[38vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
+                  />
+                </>
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={logoImageSrc}
+                  alt="Logo"
+                  className="h-[11vh] max-h-28 min-h-[56px] w-auto max-w-[75vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
+                />
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Content Area */}
-      <main className="w-full max-w-md mx-auto flex-1 flex items-center justify-center overflow-y-auto relative z-10 my-auto py-2">
+      <main className="w-full max-w-md mx-auto flex-1 flex items-center justify-center overflow-y-auto relative z-10 my-auto py-1">
         {isAlreadyRegistered ? (
           <AlreadyRegisteredView
             language={language}
@@ -267,18 +298,18 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
             {step === 'details' && (
               <>
                 {fetchError ? (
-                  <div className="w-full max-w-sm mx-auto p-6 rounded-2xl bg-navy-950/90 border border-rose-500/50 text-center space-y-4 shadow-xl">
-                    <AlertCircle className="w-12 h-12 text-rose-400 mx-auto" />
+                  <div className="w-full max-w-sm mx-auto p-5 rounded-2xl bg-navy-950/90 border border-rose-500/50 text-center space-y-3 shadow-xl">
+                    <AlertCircle className="w-10 h-10 text-rose-400 mx-auto" />
                     <div className="space-y-1">
-                      <h3 className="text-lg font-bold text-white">Invitation Not Found</h3>
+                      <h3 className="text-base font-bold text-white">Invitation Not Found</h3>
                       <p className="text-xs text-gold-400/80">{fetchError}</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setStep('language')}
-                      className="golden-btn text-xs h-10 w-full flex items-center justify-center gap-2"
+                      className="golden-btn text-xs h-9 w-full flex items-center justify-center gap-2"
                     >
-                      <RefreshCw className="w-4 h-4" />
+                      <RefreshCw className="w-3.5 h-3.5" />
                       <span>Back to Language</span>
                     </button>
                   </div>
@@ -306,7 +337,10 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
             )}
 
             {step === 'thankyou' && (
-              <ThankYouView language={language} />
+              <ThankYouView
+                language={language}
+                onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
+              />
             )}
           </>
         )}
@@ -338,7 +372,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       )}
 
       {/* Footer */}
-      <footer className="w-full text-center py-1.5 text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
+      <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
         Muthupalasa 2026
       </footer>
     </div>
