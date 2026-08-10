@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { UserProfile, Language } from '@/types/flow';
 import { translations } from '@/lib/translations';
-import { User, Lock, Phone, Edit3, Check, Globe } from 'lucide-react';
+import { User, Lock, Phone, Edit3, Check, Globe, X } from 'lucide-react';
 
 interface UserDetailsViewProps {
   user: UserProfile;
@@ -26,14 +26,34 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdatePhoneNumber(e.target.value);
-    if (errorMsg) setErrorMsg(null);
+    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    onUpdatePhoneNumber(value);
+
+    if (value.length > 0) {
+      if (value.length === 1 && value !== '0') {
+        setErrorMsg('Phone number must start with 07');
+      } else if (value.length >= 2 && !value.startsWith('07')) {
+        setErrorMsg('Phone number must start with 07');
+      } else {
+        setErrorMsg(null);
+      }
+    } else {
+      setErrorMsg(null);
+    }
   };
 
   const handleConfirmClick = () => {
-    const cleanPhone = user.phoneNumber.trim().replace(/\s+/g, '');
-    if (!cleanPhone || cleanPhone.length < 9) {
-      setErrorMsg(t.phoneRequiredErr);
+    const cleanPhone = user.phoneNumber.trim().replace(/\D/g, '');
+    if (!cleanPhone) {
+      setErrorMsg('Phone number is required');
+      return;
+    }
+    if (!cleanPhone.startsWith('07')) {
+      setErrorMsg('Phone number must start with 07');
+      return;
+    }
+    if (cleanPhone.length < 10) {
+      setErrorMsg('Phone number must be 10 digits');
       return;
     }
     setErrorMsg(null);
@@ -41,94 +61,84 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center gap-3 px-4 py-1 animate-fadeIn">
-      {/* Header & Language switcher */}
-      <div className="w-full flex items-center justify-between">
-        <h2 className="text-xl font-bold text-white tracking-tight">
-          {t.userDetailsTitle}
-        </h2>
-        <button
-          type="button"
-          onClick={onChangeLanguageClick}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-sky-400 font-medium hover:bg-slate-800 transition-colors cursor-pointer"
-        >
-          <Globe className="w-3.5 h-3.5" />
-          <span>{language.toUpperCase()}</span>
-        </button>
-      </div>
+    <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center gap-4 px-4 py-1 animate-in fade-in duration-300">
 
-      {/* Main Details Card */}
-      <div className="w-full rounded-3xl bg-slate-900/80 border border-slate-800 p-4 space-y-3 shadow-2xl flex flex-col items-center text-center">
-        {/* HUGE USER AVATAR / PHOTO */}
-        <div className="relative">
-          <div className="w-44 h-44 sm:w-48 sm:h-48 rounded-3xl overflow-hidden border-4 border-sky-400/60 bg-slate-950 shadow-2xl shadow-sky-500/20 flex items-center justify-center">
-            {user.photo ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
-            ) : (
-              <User className="w-24 h-24 text-slate-400" />
-            )}
-          </div>
-        </div>
-
-        {/* User Information */}
-        <div className="w-full space-y-0.5">
-          <h3 className="text-xl font-bold text-white tracking-tight truncate">{user.name}</h3>
-          <p className="text-xs text-slate-400 truncate font-medium">{user.outletName}</p>
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-950 border border-slate-800 text-xs font-mono text-sky-400 mt-1">
-            <span>{user.code}</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-0.5">
-              <Lock className="w-2.5 h-2.5" />
-              {t.readOnlyBadge}
-            </span>
-          </div>
-        </div>
-
-        {/* Phone Number Input */}
-        <div className="w-full space-y-1 text-left pt-2 border-t border-slate-800/80">
-          <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
-            <Phone className="w-3.5 h-3.5 text-sky-400" />
-            <span>{t.phoneNumber}</span>
-          </label>
-          <div className="relative flex items-center">
-            <span className="absolute left-4 text-xs font-medium text-slate-400 pointer-events-none">
-              +94
-            </span>
-            <input
-              type="tel"
-              value={user.phoneNumber}
-              onChange={handlePhoneChange}
-              placeholder={t.enterPhonePlaceholder}
-              className={`w-full pl-14 pr-4 h-12 bg-slate-950 rounded-full border text-sm text-white placeholder-slate-600 focus:outline-none transition-all ${
-                errorMsg
-                  ? 'border-rose-500'
-                  : 'border-slate-800 focus:border-sky-400'
-              }`}
-            />
-          </div>
-          {errorMsg && (
-            <p className="text-xs text-rose-400 font-medium px-2">{errorMsg}</p>
+      {/* User Photo */}
+      <div className="relative">
+        <div className="w-72 h-72 sm:w-80 sm:h-80 max-w-[85vw] rounded-3xl overflow-hidden border-4 border-gold-500/70 bg-navy-950 shadow-[0_0_35px_rgba(212,175,55,0.35)] flex items-center justify-center transition-all">
+          {user.photo ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+          ) : (
+            <User className="w-36 h-36 text-gold-600/70" />
           )}
         </div>
       </div>
 
-      {/* Buttons (rounded-full & uniform h-12 height) */}
-      <div className="w-full space-y-2">
+      {/* User Information */}
+      <div className="w-full space-y-1.5 text-center">
+        <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-wide truncate drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">{user.name}</h3>
+        <p className="text-sm sm:text-base text-gold-400/90 truncate font-semibold uppercase tracking-widest">{user.outletName}</p>
+        <div className="inline-flex items-center px-3.5 py-0.5 rounded-full bg-navy-950/90 border border-gold-600/40 text-xs font-mono text-gold-400 mt-1">
+          <span>{user.code}</span>
+        </div>
+      </div>
+
+      {/* Phone Number Input */}
+      <div className="w-full space-y-1 text-left pt-1">
+        <label className="block text-xs font-bold text-gold-500 uppercase tracking-wider flex items-center gap-1">
+          <Phone className="w-3.5 h-3.5 text-gold-500" />
+          <span>{t.phoneNumber}</span>
+        </label>
+        <div className="relative flex items-center h-12 rounded-full bg-navy-950/90 border border-gold-500/50 shadow-inner focus-within:ring-1 focus-within:ring-gold-400 transition-all px-2">
+          <div className="pl-2 text-gold-600/70">
+            <Phone className="w-4 h-4" />
+          </div>
+          <input
+            type="text"
+            inputMode="numeric"
+            maxLength={10}
+            autoComplete="off"
+            value={user.phoneNumber}
+            onChange={handlePhoneChange}
+            placeholder="Enter phone number (10 digits)..."
+            className="w-full h-full bg-transparent px-3 py-2 text-sm outline-none placeholder:text-gold-600/40 text-gold-400"
+          />
+          {user.phoneNumber && (
+            <button
+              type="button"
+              onClick={() => { onUpdatePhoneNumber(''); setErrorMsg(null); }}
+              className="p-1 mr-2 text-gold-600 hover:text-gold-400 transition-colors rounded-full hover:bg-gold-600/10 cursor-pointer"
+              aria-label="Clear phone number"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        {errorMsg && (
+          <p className="text-xs text-rose-400 font-semibold px-2 animate-in fade-in duration-200">{errorMsg}</p>
+        )}
+      </div>
+
+      {/* Action Buttons */}
+      <div className="w-full space-y-2.5 pt-1">
+        {/* Primary CTA Confirm Button */}
         <button
           type="button"
           onClick={handleConfirmClick}
-          className="w-full h-12 px-5 rounded-full font-bold text-base text-slate-950 bg-gradient-to-r from-sky-400 to-cyan-400 hover:from-sky-300 hover:to-cyan-300 shadow-lg shadow-sky-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="golden-btn w-full text-xs h-12 flex items-center justify-center gap-2"
         >
-          <Check className="w-5 h-5 stroke-[3]" />
+          <Check className="w-4 h-4 stroke-[3]" />
           <span>{t.confirmButton}</span>
         </button>
 
+        {/* Secondary Action Edit Details Button */}
         <button
           type="button"
           onClick={onEditDetailsClick}
-          className="w-full h-12 px-5 rounded-full border border-slate-800 bg-slate-900/50 hover:bg-slate-800 text-slate-300 text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer"
+          className="w-full h-11 px-5 rounded-full border border-gold-500/60 bg-navy-900/80 hover:bg-navy-900 hover:border-gold-400 text-gold-400 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
         >
-          <Edit3 className="w-4 h-4" />
+          <Edit3 className="w-4 h-4 text-gold-400" />
           <span>{t.editDetailsButton}</span>
         </button>
       </div>

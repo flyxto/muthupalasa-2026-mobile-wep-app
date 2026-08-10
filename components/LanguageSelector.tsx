@@ -20,18 +20,26 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
 
   const languages: { code: Language; nativeName: string; label: string }[] = [
     { code: 'si', nativeName: 'සිංහල', label: 'Sinhala' },
-    { code: 'ta', nativeName: 'தமிழ்', label: 'Tamil' },
     { code: 'en', nativeName: 'English', label: 'English' },
   ];
 
   return (
-    <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center gap-6 px-4 py-4 animate-fadeIn">
-      {/* Title */}
-      <h1 className="text-2xl font-bold text-white tracking-tight text-center">
-        {t.selectLanguageTitle}
-      </h1>
+    <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center gap-6 px-4 py-4 animate-in fade-in duration-500">
+      {/* Header Title */}
+      <div className="text-center w-full">
+        <h1 className="font-title text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 drop-shadow-[0_4px_15px_rgba(212,175,55,0.3)] mb-1">
+          {t.selectLanguageTitle}
+        </h1>
+        <div className="flex items-center justify-center gap-3 max-w-xs mx-auto mt-2">
+          <div className="h-px bg-gold-600/40 flex-1"></div>
+          <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-gold-500/80">
+            Muthupalasa 2026
+          </span>
+          <div className="h-px bg-gold-600/40 flex-1"></div>
+        </div>
+      </div>
 
-      {/* 3 Selectable Buttons (rounded-full & uniform h-12 height) */}
+      {/* Selectable Language Option Cards */}
       <div className="w-full space-y-3">
         {languages.map((lang) => {
           const isSelected = selectedLanguage === lang.code;
@@ -40,39 +48,41 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               key={lang.code}
               type="button"
               onClick={() => onSelectLanguage(lang.code)}
-              className={`w-full h-12 flex items-center justify-between px-6 rounded-full border transition-all cursor-pointer ${
+              className={`w-full h-13 flex items-center justify-between px-6 rounded-full transition-all cursor-pointer backdrop-blur-md ${
                 isSelected
-                  ? 'bg-sky-500/15 border-sky-400 text-white shadow-lg shadow-sky-500/10'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-800/50'
+                  ? 'bg-gold-500/15 border-2 border-gold-400 text-gold-300 shadow-[0_0_20px_rgba(212,175,55,0.25)] scale-[1.02]'
+                  : 'bg-navy-900/80 border border-gold-500/40 text-gold-400 hover:border-gold-400/80 hover:bg-navy-900/95'
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="font-bold text-sm">{lang.nativeName}</span>
-                <span className="text-xs text-slate-400">({lang.label})</span>
+                <span className="font-bold text-base tracking-wide">{lang.nativeName}</span>
+                <span className={`text-xs font-semibold ${isSelected ? 'text-gold-400/90' : 'text-gold-500/60'}`}>
+                  ({lang.label})
+                </span>
               </div>
 
               <div
-                className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
                   isSelected
-                    ? 'bg-sky-400 text-slate-950 shadow-md'
-                    : 'border border-slate-700 text-transparent'
+                    ? 'bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 shadow-md'
+                    : 'border border-gold-600/50 text-transparent'
                 }`}
               >
-                <Check className="w-3 h-3 stroke-[3]" />
+                <Check className="w-3.5 h-3.5 stroke-[3]" />
               </div>
             </button>
           );
         })}
       </div>
 
-      {/* Continue Button (rounded-full & uniform h-12 height) */}
+      {/* Primary CTA Continue Button */}
       <button
         type="button"
         onClick={onProceed}
-        className="w-full h-12 px-6 rounded-full font-bold text-base text-slate-950 bg-gradient-to-r from-sky-400 to-cyan-400 hover:from-sky-300 hover:to-cyan-300 shadow-lg shadow-sky-500/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+        className="golden-btn w-full text-xs h-12 flex items-center justify-center gap-2 mt-2"
       >
         <span>{t.proceed}</span>
-        <ArrowRight className="w-5 h-5" />
+        <ArrowRight className="w-4 h-4" />
       </button>
     </div>
   );

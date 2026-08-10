@@ -1,4 +1,4 @@
-export type Language = 'en' | 'si' | 'ta';
+export type Language = 'en' | 'si';
 
 export type FlowStep = 'language' | 'details' | 'video';
 
