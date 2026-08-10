@@ -31,6 +31,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
   const [isLoading, setIsLoading] = useState<boolean>(!!goldenPass);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState<boolean>(false);
+  const [isConfirming, setIsConfirming] = useState<boolean>(false);
 
   // User state pre-populated with default/demo data, updated dynamically when MongoDB returns
   const [user, setUser] = useState<UserProfile>({
@@ -66,7 +67,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
           code: doc["BP Code"] || doc["GOLDEN PASS"] || passNumber,
           photo: (doc["image url"] && doc["image url"].trim().length > 0) ? doc["image url"].trim() : '/avatar.png',
           phoneNumber: rawPhone,
-          whatsappNumber: rawPhone,
+          whatsappNumber: '',
           goldenPass: doc["GOLDEN PASS"] || passNumber,
           rawInvitation: doc,
         });
@@ -118,6 +119,35 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
       alert(`Photo upload failed: ${err.message || 'Server error'}`);
     } finally {
       setIsUploadingPhoto(false);
+    }
+  };
+
+  // Post the confirmed WhatsApp number to MongoDB and transition to video step
+  const handleConfirm = async (whatsappNumber: string) => {
+    const targetPass = user.goldenPass || goldenPass || user.code;
+
+    setIsConfirming(true);
+    try {
+      if (targetPass) {
+        const res = await fetch('/api/invitation/confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            goldenPass: targetPass,
+            whatsappNumber: whatsappNumber,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          console.warn('MongoDB confirm update warning:', data.error);
+        }
+      }
+    } catch (err: any) {
+      console.error('Error submitting WhatsApp number to MongoDB:', err);
+    } finally {
+      setIsConfirming(false);
+      setStep('video');
     }
   };
 
@@ -216,8 +246,9 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass }) => {
                 onUpdateWhatsappNumber={handleUpdateWhatsappNumber}
                 onUploadPhotoFile={handleUploadPhotoFile}
                 isUploadingPhoto={isUploadingPhoto}
+                isConfirming={isConfirming}
                 onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
-                onConfirm={() => setStep('video')}
+                onConfirm={handleConfirm}
                 onChangeLanguageClick={() => setStep('language')}
               />
             )}

@@ -17,6 +17,7 @@ export interface TranslationDictionary {
   emergencyModalTitle: string;
   emergencyModalSubtitle: string;
   phoneRequiredErr: string;
+  uploadRequiredErr: string;
   stepLanguage: string;
   stepDetails: string;
   stepThankYou: string;
@@ -45,6 +46,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     emergencyModalTitle: 'Emergency Contacts',
     emergencyModalSubtitle: 'Need urgent assistance? Contact our team directly:',
     phoneRequiredErr: 'Enter a valid 10-digit WhatsApp number starting with 07',
+    uploadRequiredErr: 'Please upload an image to continue.',
     stepLanguage: 'Language',
     stepDetails: 'Details',
     stepThankYou: 'Video',
@@ -71,6 +73,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     emergencyModalTitle: 'හදිසි ඇමතුම් සේවාව',
     emergencyModalSubtitle: 'ඔබට හදිසි සහයක් අවශ්‍යද? අපගේ කණ්ඩායම අමතන්න:',
     phoneRequiredErr: 'අංක 10කින් යුත් නිවැරදි 07X WhatsApp අංකයක් ඇතුළත් කරන්න',
+    uploadRequiredErr: 'ඉදිරියට යාමට කරුණාකර ඡායාරූපයක් එක් කරන්න.',
     stepLanguage: 'භාෂාව',
     stepDetails: 'විස්තර',
     stepThankYou: 'වීඩියෝව',

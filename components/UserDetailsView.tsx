@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UserProfile, Language } from '@/types/flow';
 import { translations } from '@/lib/translations';
-import { User, Phone, Check, X, ShieldAlert, MessageCircle, Upload, Loader2 } from 'lucide-react';
+import { User, Phone, Check, X, ShieldAlert, MessageCircle, Upload, Loader2, AlertCircle } from 'lucide-react';
 
 interface UserDetailsViewProps {
   user: UserProfile;
@@ -11,8 +11,9 @@ interface UserDetailsViewProps {
   onUpdateWhatsappNumber: (phone: string) => void;
   onUploadPhotoFile: (file: File) => void;
   isUploadingPhoto?: boolean;
+  isConfirming?: boolean;
   onEmergencyContactClick: () => void;
-  onConfirm: () => void;
+  onConfirm: (whatsappNumber: string) => void;
   onChangeLanguageClick: () => void;
 }
 
@@ -22,6 +23,7 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   onUpdateWhatsappNumber,
   onUploadPhotoFile,
   isUploadingPhoto = false,
+  isConfirming = false,
   onEmergencyContactClick,
   onConfirm,
   onChangeLanguageClick,
@@ -30,14 +32,20 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const currentWhatsappVal = user.whatsappNumber !== undefined ? user.whatsappNumber : user.phoneNumber;
+  // Strictly empty by default if not set by user
+  const currentWhatsappVal = user.whatsappNumber || '';
   
   // Check if the fetched MongoDB document has a valid, non-empty image URL
   const fetchedImageUrl = user.rawInvitation?.["image url"]?.trim();
-  const hasFetchedImageUrl = Boolean(fetchedImageUrl && fetchedImageUrl.length > 0);
 
-  // The upload button is only visible if there is NO image URL on the fetched object
-  const showUploadButton = !hasFetchedImageUrl;
+  // Check if user currently has a valid non-fallback image
+  const hasValidImage = Boolean(
+    (fetchedImageUrl && fetchedImageUrl.length > 0) ||
+    (user.photo && user.photo.trim().length > 0 && user.photo.trim() !== '/avatar.png')
+  );
+
+  // The upload button is only visible if there is NO valid image URL on the fetched object
+  const showUploadButton = !hasValidImage;
 
   // Determine photo source: fetched image URL, uploaded photo URL, or default /avatar.png fallback
   const photoSrc = (user.photo && user.photo.trim().length > 0) ? user.photo.trim() : '/avatar.png';
@@ -78,6 +86,11 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   };
 
   const handleConfirmClick = () => {
+    if (!hasValidImage) {
+      setErrorMsg(t.uploadRequiredErr);
+      return;
+    }
+
     const cleanPhone = currentWhatsappVal.trim().replace(/\D/g, '');
     if (!cleanPhone) {
       setErrorMsg(t.phoneRequiredErr);
@@ -92,7 +105,7 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
       return;
     }
     setErrorMsg(null);
-    onConfirm();
+    onConfirm(cleanPhone);
   };
 
   return (
@@ -121,7 +134,7 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
             </div>
           )}
 
-          {/* Photo Image (blurred if fallback/upload photo, clear if fetched MongoDB image) */}
+          {/* Photo Image (blurred if fallback/upload photo, clear if valid image present) */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={photoSrc}
@@ -150,6 +163,14 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
         </div>
       </div>
 
+      {/* Helper text if image is missing */}
+      {!hasValidImage && !isUploadingPhoto && (
+        <div className="w-full text-center px-3 py-1.5 bg-navy-950/80 border border-gold-500/40 rounded-xl text-xs font-semibold text-gold-400 flex items-center justify-center gap-1.5 shadow-sm animate-in fade-in duration-200">
+          <AlertCircle className="w-3.5 h-3.5 text-gold-500 shrink-0" />
+          <span>{t.uploadRequiredErr}</span>
+        </div>
+      )}
+
       {/* User Information */}
       <div className="w-full space-y-1 text-center">
         <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-wide truncate drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">{user.name}</h3>
@@ -171,8 +192,7 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
 
       {/* WhatsApp Phone Number Input */}
       <div className="w-full space-y-1 text-left pt-1">
-        <label className="block text-xs font-bold text-gold-500 uppercase tracking-wider flex items-center gap-1">
-          <MessageCircle className="w-3.5 h-3.5 text-gold-500" />
+        <label className="block text-xs font-bold text-gold-500 uppercase tracking-wider">
           <span>{t.whatsappNumber}</span>
         </label>
         <div className="relative flex items-center h-12 rounded-full bg-navy-950/90 border border-gold-500/50 shadow-inner focus-within:ring-1 focus-within:ring-gold-400 transition-all px-2">
@@ -207,14 +227,28 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
 
       {/* Action Buttons */}
       <div className="w-full space-y-2.5 pt-1">
-        {/* Primary CTA Confirm Button */}
+        {/* Primary CTA Confirm Button: Disabled if no valid image is uploaded/present or confirming */}
         <button
           type="button"
           onClick={handleConfirmClick}
-          className="golden-btn w-full text-xs h-12 flex items-center justify-center gap-2"
+          disabled={!hasValidImage || isUploadingPhoto || isImageLoading || isConfirming}
+          className={`golden-btn w-full text-xs h-12 flex items-center justify-center gap-2 transition-all ${
+            (!hasValidImage || isUploadingPhoto || isImageLoading || isConfirming)
+              ? 'opacity-40 cursor-not-allowed pointer-events-none grayscale'
+              : ''
+          }`}
         >
-          <Check className="w-4 h-4 stroke-[3]" />
-          <span>{t.confirmButton}</span>
+          {isConfirming ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin text-navy-950" />
+              <span>Submitting...</span>
+            </>
+          ) : (
+            <>
+              <Check className="w-4 h-4 stroke-[3]" />
+              <span>{t.confirmButton}</span>
+            </>
+          )}
         </button>
 
         {/* Secondary Action Emergency Contact Button */}
