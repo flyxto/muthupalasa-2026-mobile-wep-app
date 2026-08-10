@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { FlowStep, Language, UserProfile, InvitationDocument, ClubType } from '@/types/flow';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { UserDetailsView } from '@/components/UserDetailsView';
+import { AlreadyRegisteredView } from '@/components/AlreadyRegisteredView';
 import { EmergencyContactModal } from '@/components/EmergencyContactModal';
 import { VideoThankYouView } from '@/components/VideoThankYouView';
 import { ThankYouView } from '@/components/ThankYouView';
@@ -26,7 +27,6 @@ interface MainFlowProps {
 
 const getFrameImage = (club: ClubType): string => {
   if (club === 'starclub') return '/sc-frame.png';
-  // Both 'mp' and 'dmart' use '/mp-dm-frame.png'
   return '/mp-dm-frame.png';
 };
 
@@ -53,6 +53,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
   const [step, setStep] = useState<FlowStep>('language');
   const [language, setLanguage] = useState<Language>('en');
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
+  const [isAlreadyRegistered, setIsAlreadyRegistered] = useState<boolean>(false);
 
   // Loading & error state for fetching MongoDB invitation data
   const [isLoading, setIsLoading] = useState<boolean>(!!goldenPass);
@@ -88,13 +89,19 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           rawPhone = `0${rawPhone}`;
         }
 
+        // Strictly check if the MongoDB document has a non-empty WHATSAPP NUMBER
+        const whatsappNum = (doc["WHATSAPP NUMBER"] || '').toString().trim();
+        const hasWhatsappNumber = whatsappNum.length > 0;
+
+        setIsAlreadyRegistered(hasWhatsappNumber);
+
         setUser({
           name: doc["OWNER'S NAME"] || doc["BP Name"] || 'Valued Guest',
           outletName: doc["OUTLET NAME"] || 'Exclusive Outlet',
           code: doc["BP Code"] || doc["GOLDEN PASS"] || passNumber,
           photo: (doc["image url"] && doc["image url"].trim().length > 0) ? doc["image url"].trim() : '/avatar.png',
           phoneNumber: rawPhone,
-          whatsappNumber: '',
+          whatsappNumber: whatsappNum,
           goldenPass: doc["GOLDEN PASS"] || passNumber,
           rawInvitation: doc,
         });
@@ -218,79 +225,90 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           />
         </div>
 
-        {/* 3-Dot Step Bar */}
-        <div className="flex items-center gap-1.5 z-20">
-          <div
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              step === 'language' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
-            }`}
-          />
-          <div
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              step === 'details' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
-            }`}
-          />
-          <div
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              step === 'video' || step === 'thankyou' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
-            }`}
-          />
-        </div>
+        {/* 3-Dot Step Bar (hidden if already registered) */}
+        {!isAlreadyRegistered && (
+          <div className="flex items-center gap-1.5 z-20">
+            <div
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                step === 'language' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
+              }`}
+            />
+            <div
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                step === 'details' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
+              }`}
+            />
+            <div
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                step === 'video' || step === 'thankyou' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
+              }`}
+            />
+          </div>
+        )}
       </div>
 
       {/* Main Content Area */}
       <main className="w-full max-w-md mx-auto flex-1 flex items-center justify-center overflow-y-auto relative z-10 my-auto py-2">
-        {step === 'language' && (
-          <LanguageSelector
-            selectedLanguage={language}
-            onSelectLanguage={(lang) => setLanguage(lang)}
-            onProceed={() => setStep('details')}
+        {isAlreadyRegistered ? (
+          <AlreadyRegisteredView
+            language={language}
+            onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
           />
-        )}
-
-        {step === 'details' && (
+        ) : (
           <>
-            {fetchError ? (
-              <div className="w-full max-w-sm mx-auto p-6 rounded-2xl bg-navy-950/90 border border-rose-500/50 text-center space-y-4 shadow-xl">
-                <AlertCircle className="w-12 h-12 text-rose-400 mx-auto" />
-                <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-white">Invitation Not Found</h3>
-                  <p className="text-xs text-gold-400/80">{fetchError}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setStep('language')}
-                  className="golden-btn text-xs h-10 w-full flex items-center justify-center gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  <span>Back to Language</span>
-                </button>
-              </div>
-            ) : (
-              <UserDetailsView
-                user={user}
-                language={language}
-                onUpdateWhatsappNumber={handleUpdateWhatsappNumber}
-                onUploadPhotoFile={handleUploadPhotoFile}
-                isUploadingPhoto={isUploadingPhoto}
-                isConfirming={isConfirming}
-                onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
-                onConfirm={handleConfirm}
-                onChangeLanguageClick={() => setStep('language')}
+            {step === 'language' && (
+              <LanguageSelector
+                selectedLanguage={language}
+                onSelectLanguage={(lang) => setLanguage(lang)}
+                onProceed={() => setStep('details')}
               />
             )}
+
+            {step === 'details' && (
+              <>
+                {fetchError ? (
+                  <div className="w-full max-w-sm mx-auto p-6 rounded-2xl bg-navy-950/90 border border-rose-500/50 text-center space-y-4 shadow-xl">
+                    <AlertCircle className="w-12 h-12 text-rose-400 mx-auto" />
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-bold text-white">Invitation Not Found</h3>
+                      <p className="text-xs text-gold-400/80">{fetchError}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setStep('language')}
+                      className="golden-btn text-xs h-10 w-full flex items-center justify-center gap-2"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      <span>Back to Language</span>
+                    </button>
+                  </div>
+                ) : (
+                  <UserDetailsView
+                    user={user}
+                    language={language}
+                    onUpdateWhatsappNumber={handleUpdateWhatsappNumber}
+                    onUploadPhotoFile={handleUploadPhotoFile}
+                    isUploadingPhoto={isUploadingPhoto}
+                    isConfirming={isConfirming}
+                    onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
+                    onConfirm={handleConfirm}
+                    onChangeLanguageClick={() => setStep('language')}
+                  />
+                )}
+              </>
+            )}
+
+            {step === 'video' && (
+              <VideoThankYouView
+                language={language}
+                onVideoEnded={() => setStep('thankyou')}
+              />
+            )}
+
+            {step === 'thankyou' && (
+              <ThankYouView language={language} />
+            )}
           </>
-        )}
-
-        {step === 'video' && (
-          <VideoThankYouView
-            language={language}
-            onVideoEnded={() => setStep('thankyou')}
-          />
-        )}
-
-        {step === 'thankyou' && (
-          <ThankYouView language={language} />
         )}
       </main>
 
