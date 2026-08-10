@@ -21,6 +21,10 @@ export interface TranslationDictionary {
   stepLanguage: string;
   stepDetails: string;
   stepThankYou: string;
+  thankYouTitle: string;
+  thankYouSubtitle: string;
+  joinWhatsappButton: string;
+  skipVideo: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -31,7 +35,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     userDetailsTitle: 'Outlet Details',
     name: 'Full Name',
     outletName: 'Outlet Name',
-    shopCode: 'Shop Code',
+    shopCode: 'Outlet Code',
     readOnlyBadge: 'Locked',
     phoneNumber: 'Phone Number',
     enterPhonePlaceholder: '07X XXX XXXX',
@@ -45,6 +49,10 @@ export const translations: Record<Language, TranslationDictionary> = {
     stepLanguage: 'Language',
     stepDetails: 'Details',
     stepThankYou: 'Video',
+    thankYouTitle: 'Thank You!',
+    thankYouSubtitle: 'Thank you for your confirmation. Stay updated by joining our official WhatsApp Channel.',
+    joinWhatsappButton: 'Join Our WhatsApp Channel',
+    skipVideo: 'Skip',
   },
   si: {
     appTitle: 'මුතුපලස',
@@ -53,7 +61,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     userDetailsTitle: 'අවුට්ලෙට් විස්තර',
     name: 'නම',
     outletName: 'කඩයේ නම',
-    shopCode: 'කඩයේ කේතය',
+    shopCode: 'අවුට්ලෙට් කේතය',
     readOnlyBadge: 'වෙනස් කළ නොහැක',
     phoneNumber: 'දුරකථන අංකය',
     enterPhonePlaceholder: '07X XXX XXXX',
@@ -67,5 +75,9 @@ export const translations: Record<Language, TranslationDictionary> = {
     stepLanguage: 'භාෂාව',
     stepDetails: 'විස්තර',
     stepThankYou: 'වීඩියෝව',
+    thankYouTitle: 'ස්තූතියි!',
+    thankYouSubtitle: 'ඔබගේ තහවුරු කිරීමට ස්තූතියි. අපගේ නිල WhatsApp චැනලයට එකතු වී අලුත්ම තොරතුරු ලබාගන්න.',
+    joinWhatsappButton: 'Join Our WhatsApp Channel',
+    skipVideo: 'මගහරින්න',
   },
 };

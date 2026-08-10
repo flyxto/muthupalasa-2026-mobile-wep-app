@@ -232,3 +232,33 @@ input:-webkit-autofill:active {
 .animate-modal-card-out {
   animation: modalScaleDown 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Gentle Floating Animation */
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+/* Smooth Video Entrance Animation */
+@keyframes videoEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-video-entrance {
+  animation: videoEntrance 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

@@ -53,8 +53,8 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
     setIsClosing(true);
     setTimeout(() => {
       onSave({
-        name: name.trim() || user.name,
-        outletName: outletName.trim() || user.outletName,
+        name: user.name,
+        outletName: user.outletName,
         photo: photo,
       });
     }, 260);
@@ -94,31 +94,31 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
             </label>
           </div>
 
-          {/* Name */}
-          <div className="space-y-1">
+          {/* Read-Only Name */}
+          <div className="space-y-1 opacity-70">
             <label className="block text-xs font-bold text-gold-500 uppercase tracking-wider">{t.name}</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full px-4 h-11 bg-navy-950 rounded-full border border-gold-500/50 text-sm text-gold-400 placeholder:text-gold-600/40 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400"
+              value={user.name}
+              disabled
+              readOnly
+              className="w-full px-4 h-11 bg-navy-950/80 rounded-full border border-gold-600/40 text-sm text-gold-500/70 cursor-not-allowed select-none"
             />
           </div>
 
-          {/* Outlet Name */}
-          <div className="space-y-1">
+          {/* Read-Only Outlet Name */}
+          <div className="space-y-1 opacity-70">
             <label className="block text-xs font-bold text-gold-500 uppercase tracking-wider">{t.outletName}</label>
             <input
               type="text"
-              value={outletName}
-              onChange={(e) => setOutletName(e.target.value)}
-              required
-              className="w-full px-4 h-11 bg-navy-950 rounded-full border border-gold-500/50 text-sm text-gold-400 placeholder:text-gold-600/40 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400"
+              value={user.outletName}
+              disabled
+              readOnly
+              className="w-full px-4 h-11 bg-navy-950/80 rounded-full border border-gold-600/40 text-sm text-gold-500/70 cursor-not-allowed select-none"
             />
           </div>
 
-          {/* Read-Only Shop Code */}
+          {/* Read-Only Outlet Code */}
           <div className="space-y-1 opacity-70">
             <label className="block text-xs font-bold text-gold-500 uppercase tracking-wider">
               <span>{t.shopCode}</span>

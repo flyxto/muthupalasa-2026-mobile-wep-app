@@ -6,6 +6,7 @@ import { LanguageSelector } from '@/components/LanguageSelector';
 import { UserDetailsView } from '@/components/UserDetailsView';
 import { EditDetailsModal } from '@/components/EditDetailsModal';
 import { VideoThankYouView } from '@/components/VideoThankYouView';
+import { ThankYouView } from '@/components/ThankYouView';
 
 const PARTICLES = Array.from({ length: 45 }, (_, i) => ({
   id: i,
@@ -43,11 +44,6 @@ export default function Home() {
     setIsEditModalOpen(false);
     setStep('video');
   };
-
-  // Pure full-screen video step
-  if (step === 'video') {
-    return <VideoThankYouView />;
-  }
 
   return (
     <div className="min-h-svh max-h-svh h-svh bg-navy-800 text-gold-400 font-sans px-4 sm:px-6 py-3 relative overflow-hidden flex flex-col items-center justify-between select-none">
@@ -87,16 +83,21 @@ export default function Home() {
           />
         </div>
 
-        {/* Minimal 2-Dot Step Bar */}
+        {/* 3-Dot Step Bar */}
         <div className="flex items-center gap-1.5 z-20">
           <div
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              step === 'language' ? 'w-6 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
+              step === 'language' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
             }`}
           />
           <div
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              step === 'details' ? 'w-6 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
+              step === 'details' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
+            }`}
+          />
+          <div
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              step === 'video' || step === 'thankyou' ? 'w-5 bg-gradient-to-r from-gold-500 to-gold-400' : 'w-2 bg-navy-900 border border-gold-600/40'
             }`}
           />
         </div>
@@ -121,6 +122,17 @@ export default function Home() {
             onConfirm={() => setStep('video')}
             onChangeLanguageClick={() => setStep('language')}
           />
+        )}
+
+        {step === 'video' && (
+          <VideoThankYouView
+            language={language}
+            onVideoEnded={() => setStep('thankyou')}
+          />
+        )}
+
+        {step === 'thankyou' && (
+          <ThankYouView language={language} />
         )}
       </main>
 

@@ -1,6 +1,6 @@
 export type Language = 'en' | 'si';
 
-export type FlowStep = 'language' | 'details' | 'video';
+export type FlowStep = 'language' | 'details' | 'video' | 'thankyou';
 
 export interface UserProfile {
   name: string;
