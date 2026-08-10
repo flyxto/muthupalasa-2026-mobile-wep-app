@@ -172,13 +172,20 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
       )}
 
       {/* User Information */}
-      <div className="w-full space-y-0.5 text-center">
-        <h3 className="text-[clamp(1.1rem,3vh,2rem)] font-extrabold text-white tracking-wide truncate drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)] leading-snug">{user.name}</h3>
-        <p className="text-[clamp(0.7rem,1.8vh,0.9rem)] text-gold-400/90 truncate font-semibold uppercase tracking-widest">{user.outletName}</p>
+      <div className="w-full space-y-0.5 text-center px-1">
+        {/* Guest Name: Never truncated, scales responsively, wraps up to 2 lines cleanly */}
+        <h3 className="text-[clamp(0.85rem,2.4vh,1.35rem)] font-extrabold text-white tracking-wide text-wrap break-words leading-tight drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)] max-w-full">
+          {user.name}
+        </h3>
+        
+        {/* Outlet Name: Never truncated, scales responsively */}
+        <p className="text-[clamp(0.68rem,1.7vh,0.85rem)] text-gold-400/90 font-semibold uppercase tracking-widest text-wrap break-words leading-tight max-w-full">
+          {user.outletName}
+        </p>
         
         {/* Registered Phone Number displayed under Outlet Name if present */}
         {user.phoneNumber && (
-          <div className="flex items-center justify-center gap-1 text-[clamp(0.65rem,1.5vh,0.75rem)] text-gold-400/80 font-mono font-medium pt-0.5">
+          <div className="flex items-center justify-center gap-1 text-[clamp(0.62rem,1.4vh,0.72rem)] text-gold-400/80 font-mono font-medium pt-0.5">
             <Phone className="w-3 h-3 text-gold-500" />
             <span>Phone: {user.phoneNumber}</span>
           </div>
