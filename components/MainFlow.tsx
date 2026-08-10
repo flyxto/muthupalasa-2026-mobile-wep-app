@@ -256,13 +256,13 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
                   <img
                     src="/mp-logo.png"
                     alt="Muthupalasa Logo"
-                    className="h-[8.5vh] max-h-24 min-h-[44px] w-auto max-w-[38vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
+                    className="h-[8.5vh] max-h-24 min-h-[44px] w-auto max-w-[38vw] object-contain  transition-all duration-300"
                   />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/dm.png"
                     alt="D-Mart Logo"
-                    className="h-[8.5vh] max-h-24 min-h-[44px] w-auto max-w-[38vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
+                    className="h-[8.5vh] max-h-24 min-h-[44px] w-auto max-w-[38vw] object-contain transition-all duration-300"
                   />
                 </>
               ) : (
@@ -270,7 +270,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
                 <img
                   src={logoImageSrc}
                   alt="Logo"
-                  className="h-[11vh] max-h-28 min-h-[56px] w-auto max-w-[75vw] object-contain drop-shadow-[0_6px_25px_rgba(212,175,55,0.45)] transition-all duration-300"
+                  className="h-[11vh] max-h-28 min-h-[56px] w-auto max-w-[75vw] object-contain transition-all duration-300"
                 />
               )}
             </div>
