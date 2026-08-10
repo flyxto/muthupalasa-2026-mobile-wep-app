@@ -29,6 +29,10 @@ export interface TranslationDictionary {
   joinWhatsappButton: string;
   skipVideo: string;
   uploadPhoto: string;
+  editModalTitle?: string;
+  editPhotoLabel?: string;
+  saveChanges?: string;
+  cancel?: string;
 }
 
 export const translations: Record<Language, TranslationDictionary> = {
@@ -61,6 +65,10 @@ export const translations: Record<Language, TranslationDictionary> = {
     joinWhatsappButton: 'Join Our WhatsApp Channel',
     skipVideo: 'Skip',
     uploadPhoto: 'Upload Photo',
+    editModalTitle: 'Edit Details',
+    editPhotoLabel: 'Photo',
+    saveChanges: 'Save',
+    cancel: 'Cancel',
   },
   si: {
     appTitle: 'මුතුපලස',
@@ -91,5 +99,9 @@ export const translations: Record<Language, TranslationDictionary> = {
     joinWhatsappButton: 'WhatsApp චැනලයට එකතු වන්න',
     skipVideo: 'මගහරින්න',
     uploadPhoto: 'ඡායාරූපයක් එක් කරන්න',
+    editModalTitle: 'විස්තර සංස්කරණය',
+    editPhotoLabel: 'ඡායාරූපය',
+    saveChanges: 'සුරකින්න',
+    cancel: 'අවලංගු කරන්න',
   },
 };

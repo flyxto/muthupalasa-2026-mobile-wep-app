@@ -20,8 +20,6 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
 }) => {
   const t = translations[language];
 
-  const [name, setName] = useState(user.name);
-  const [outletName, setOutletName] = useState(user.outletName);
   const [photo, setPhoto] = useState(user.photo);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +63,7 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
       <div className={`w-full max-w-sm bg-navy-900 border border-gold-500/50 rounded-3xl shadow-[0_4px_30px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col max-h-[85vh] ${isClosing ? 'animate-modal-card-out' : 'animate-modal-card'}`}>
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold-600/30 bg-navy-950/40 shrink-0">
-          <h3 className="font-title text-base font-bold text-gold-400 uppercase tracking-wide">{t.editModalTitle}</h3>
+          <h3 className="font-title text-base font-bold text-gold-400 uppercase tracking-wide">{t.editModalTitle || 'Edit Details'}</h3>
           <button
             type="button"
             onClick={handleClose}
@@ -89,7 +87,7 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
             </div>
             <label className="golden-btn text-xs h-10 px-5 flex items-center justify-center gap-2 cursor-pointer mt-1">
               <Camera className="w-4 h-4 stroke-[2.5]" />
-              <span>Upload Photo</span>
+              <span>{t.uploadPhoto}</span>
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
             </label>
           </div>
@@ -141,13 +139,13 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
               onClick={handleClose}
               className="flex-1 h-11 rounded-full border border-gold-600/50 bg-navy-950 text-gold-400 text-xs font-bold uppercase tracking-wider hover:border-gold-400 transition-colors cursor-pointer"
             >
-              {t.cancel}
+              {t.cancel || 'Cancel'}
             </button>
             <button
               type="submit"
               className="golden-btn flex-1 text-xs h-11 flex items-center justify-center"
             >
-              {t.saveChanges}
+              {t.saveChanges || 'Save'}
             </button>
           </div>
         </form>
