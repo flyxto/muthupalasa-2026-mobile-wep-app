@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -20,7 +20,13 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Muthupalasa 2026 - Mobile Web App",
   description: "Scanned app outlet verification and multi-language user details portal",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

@@ -42,6 +42,8 @@ html, body {
   max-height: 100svh;
   overflow: hidden;
   touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 body, input, button, select, textarea {
