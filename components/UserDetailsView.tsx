@@ -120,9 +120,9 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
         onChange={handleFileChange}
       />
 
-      {/* User Photo Frame Box - Dynamically scales with viewport height so it never cuts off */}
+      {/* User Photo Frame Box - Strictly forced 1:1 Aspect Square on all devices */}
       <div className="relative flex justify-center w-full">
-        <div className="w-[36vh] h-[36vh] max-w-[65vw] max-h-[250px] min-w-[130px] min-h-[130px] aspect-square rounded-2xl sm:rounded-3xl overflow-hidden border-4 border-gold-500/70 bg-navy-950 shadow-[0_0_30px_rgba(212,175,55,0.35)] relative flex items-center justify-center transition-all shrink-0">
+        <div className="w-[min(34vh,60vw,240px)] h-auto aspect-square min-w-[130px] rounded-2xl sm:rounded-3xl overflow-hidden border-4 border-gold-500/70 bg-navy-950 shadow-[0_0_30px_rgba(212,175,55,0.35)] relative flex items-center justify-center transition-all shrink-0">
           
           {/* Image Loader Overlay inside photo container while uploading or rendering new image */}
           {(isUploadingPhoto || isImageLoading) && (
