@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getInvitationsCollection } from '@/lib/mongodb';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ goldenPass: string }> }
@@ -21,11 +19,13 @@ export async function GET(
     const targetPass = goldenPass.trim();
     const collection = await getInvitationsCollection();
 
-    // Query invitation by goldenPass
+    // Query invitation by "goldenPass" or "GOLDEN PASS"
     const invitation = await collection.findOne({
       $or: [
         { goldenPass: targetPass },
-        { goldenPass: String(targetPass) }
+        { goldenPass: String(targetPass) },
+        { "GOLDEN PASS": targetPass },
+        { "GOLDEN PASS": String(targetPass) }
       ]
     });
 

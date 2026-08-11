@@ -71,7 +71,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
   });
 
   // Check if object date is 17th August (case-insensitive check)
-  const rawDate = (user.rawInvitation?.eventDate || '').toString().toLowerCase().trim();
+  const rawDate = (user.rawInvitation?.["DATE"] || '').toString().toLowerCase().trim();
   const is17thAugust = rawDate.includes('17th aug') || rawDate.includes('17th august') || rawDate.includes('17 aug') || rawDate.includes('17 august');
 
   // Dynamic frame image selection (if date is 17th, force '/mp-dm-frame.png')
@@ -87,60 +87,34 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
     setFetchError(null);
     try {
       const res = await fetch(`/api/invitation/${passNumber}`);
-      
-      let errorMsg = `Invitation pass "${passNumber}" not found.`;
-      
       if (!res.ok) {
-        try {
-          const errorData = await res.json();
-          if (errorData.error) errorMsg = errorData.error;
-          if (errorData.message) errorMsg += ` (${errorData.message})`;
-        } catch (e) {
-          // ignore json parse error
-        }
-        throw new Error(errorMsg);
+        throw new Error(`Invitation pass "${passNumber}" not found.`);
       }
-      
       const resData = await res.json();
       if (resData.success && resData.data) {
         const doc: InvitationDocument = resData.data;
 
-        // Apply any local storage overrides
-        try {
-          const savedPhoto = localStorage.getItem(`mock_photo_${passNumber}`);
-          if (savedPhoto) {
-            doc.originalImage = savedPhoto;
-            doc.rawImage = savedPhoto;
-          }
-          const savedWa = localStorage.getItem(`mock_wa_${passNumber}`);
-          if (savedWa) {
-            doc.waNumber = savedWa;
-            doc.waStatus = true;
-            doc.isRegistered = true;
-          }
-        } catch (e) {
-          // ignore localStorage errors
-        }
-
-        let rawPhone = (doc.mobileNumber || '').toString().trim().replace(/\D/g, '');
+        let rawPhone = (doc["MOBILE NUMBER"] || doc.mobileNumber || '').toString().trim().replace(/\D/g, '');
         if (rawPhone.length === 9 && rawPhone.startsWith('7')) {
           rawPhone = `0${rawPhone}`;
         }
 
         // Strictly check if the MongoDB document has a non-empty WHATSAPP NUMBER
-        const whatsappNum = (doc.waNumber || '').toString().trim();
+        const whatsappNum = (doc["WHATSAPP NUMBER"] || doc.waNumber || '').toString().trim();
         const hasWhatsappNumber = whatsappNum.length > 0;
 
         setIsAlreadyRegistered(hasWhatsappNumber);
 
         setUser({
-          name: doc.ownerName || doc.bpName || 'Valued Guest',
-          outletName: doc.outletName || 'Exclusive Outlet',
-          code: doc.outletCode || doc.bpCode || doc.goldenPass || passNumber,
-          photo: (doc.originalImage && doc.originalImage.trim().length > 0) ? doc.originalImage.trim() : '/avatar.png',
+          name: doc["OWNER'S NAME"] || doc["BP Name"] || doc.ownerName || doc.bpName || 'Valued Guest',
+          outletName: doc["OUTLET NAME"] || doc.outletName || 'Exclusive Outlet',
+          code: doc["Outlet Code"] || doc["BP Code"] || doc["GOLDEN PASS"] || doc.outletCode || doc.bpCode || doc.goldenPass || passNumber,
+          photo: (doc["image url"] && doc["image url"].trim().length > 0) ? doc["image url"].trim() :
+            (doc.processedImage && doc.processedImage.trim().length > 0) ? doc.processedImage.trim() :
+              (doc.originalImage && doc.originalImage.trim().length > 0) ? doc.originalImage.trim() : '/avatar.png',
           phoneNumber: rawPhone,
           whatsappNumber: whatsappNum,
-          goldenPass: doc.goldenPass || passNumber,
+          goldenPass: doc["GOLDEN PASS"] || doc.goldenPass || passNumber,
           rawInvitation: doc,
         });
       }
@@ -184,15 +158,6 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         throw new Error(data.error || 'Failed to upload photo to Cloudflare R2');
       }
 
-      // Save to localStorage for mock persistence
-      try {
-        if (data.imageUrl) {
-          localStorage.setItem(`mock_photo_${targetPass}`, data.imageUrl);
-        }
-      } catch (e) {
-        // ignore
-      }
-
       // Refetch invitation data from MongoDB to update UI without page reload
       await fetchInvitationData(targetPass);
     } catch (err: any) {
@@ -222,13 +187,6 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         const data = await res.json();
         if (!res.ok || !data.success) {
           console.warn('MongoDB confirm update warning:', data.error);
-        } else {
-          // Save to localStorage for mock persistence
-          try {
-            localStorage.setItem(`mock_wa_${targetPass}`, whatsappNumber);
-          } catch (e) {
-            // ignore
-          }
         }
       }
     } catch (err: any) {
@@ -241,7 +199,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
 
   return (
     <div className="min-h-svh max-h-svh h-svh bg-navy-800 text-gold-400 font-sans px-3 sm:px-6 py-2 sm:py-3 relative overflow-hidden flex flex-col items-center justify-between select-none">
-      
+
       {/* Blurred Fullscreen Overlay Loader until frame and logos load */}
       {goldenPass && !isDataReady && !fetchError && (
         <div className="fixed inset-0 z-50 bg-navy-950/85 backdrop-blur-lg flex flex-col items-center justify-center gap-3 animate-in fade-in duration-200">
@@ -377,8 +335,6 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
               <VideoThankYouView
                 language={language}
                 onVideoEnded={() => setStep('thankyou')}
-                rawDate={rawDate}
-                clubType={activeClub}
               />
             )}
 
@@ -393,7 +349,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       </main>
 
       {/* Knight Emblem at Bottom of Screen */}
-      <div 
+      <div
         className="fixed pointer-events-none z-[5] flex justify-center"
         style={{
           left: 'calc(50% - 15px)',
@@ -402,9 +358,9 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src="/knight-2.png" 
-          alt="Knight Emblem" 
+        <img
+          src="/knight-2.png"
+          alt="Knight Emblem"
           className="w-44 sm:w-56 md:w-64 max-h-48 sm:max-h-56 object-contain drop-shadow-[0_4px_25px_rgba(0,0,0,0.7)] origin-bottom opacity-85"
         />
       </div>
@@ -418,9 +374,9 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       )}
 
       {/* Footer */}
-      {/* <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
+      <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
         Muthupalasa 2026
-      </footer> */}
+      </footer>
     </div>
   );
 };
