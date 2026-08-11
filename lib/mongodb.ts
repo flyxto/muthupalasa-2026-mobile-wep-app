@@ -26,7 +26,17 @@ function getClientPromise(): Promise<MongoClient> {
   if (!process.env.MONGODB_URI) {
     throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
   }
-  const uri = process.env.MONGODB_URI;
+  
+  // Clean up the URI by trimming spaces and removing accidental double/single quotes from Vercel env settings
+  let uri = process.env.MONGODB_URI.trim();
+  if (uri.startsWith('"') && uri.endsWith('"')) uri = uri.slice(1, -1);
+  if (uri.startsWith("'") && uri.endsWith("'")) uri = uri.slice(1, -1);
+  uri = uri.trim();
+
+  if (!uri.startsWith("mongodb://") && !uri.startsWith("mongodb+srv://")) {
+    throw new Error(`The MONGODB_URI is invalid (does not start with mongodb:// or mongodb+srv://). It currently starts with: "${uri.substring(0, 15)}..."`);
+  }
+
   const options: MongoClientOptions = {};
 
   if (process.env.NODE_ENV === "development") {
