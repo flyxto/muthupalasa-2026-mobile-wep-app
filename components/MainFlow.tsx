@@ -71,7 +71,14 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
   });
 
   // Check if object date is 17th August (case-insensitive check)
-  const rawDate = (user.rawInvitation?.["DATE"] || '').toString().toLowerCase().trim();
+  const rawDate = (
+    user.rawInvitation?.["DATE"] ||
+    user.rawInvitation?.["Date"] ||
+    user.rawInvitation?.eventDate ||
+    user.rawInvitation?.["EVENT DATE"] ||
+    user.rawInvitation?.["Event Date"] ||
+    ''
+  ).toString().toLowerCase().trim();
   const is17thAugust = rawDate.includes('17th aug') || rawDate.includes('17th august') || rawDate.includes('17 aug') || rawDate.includes('17 august');
 
   // Dynamic frame image selection (if date is 17th, force '/mp-dm-frame.png')
@@ -286,6 +293,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           <AlreadyRegisteredView
             language={language}
             onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
+            rawDate={rawDate}
           />
         ) : (
           <>
@@ -335,6 +343,8 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
               <VideoThankYouView
                 language={language}
                 onVideoEnded={() => setStep('thankyou')}
+                rawDate={rawDate}
+                clubType={activeClub}
               />
             )}
 
@@ -342,6 +352,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
               <ThankYouView
                 language={language}
                 onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
+                rawDate={rawDate}
               />
             )}
           </>
@@ -374,9 +385,9 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       )}
 
       {/* Footer */}
-      <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
+      {/* <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
         Muthupalasa 2026
-      </footer>
+      </footer> */}
     </div>
   );
 };

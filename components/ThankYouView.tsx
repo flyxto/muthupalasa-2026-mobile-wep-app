@@ -4,19 +4,22 @@ import React from 'react';
 import Image from 'next/image';
 import { Language } from '@/types/flow';
 import { translations } from '@/lib/translations';
+import { getWhatsappChannelUrl } from '@/lib/whatsapp';
 import { ShieldAlert } from 'lucide-react';
 
 interface ThankYouViewProps {
   language: Language;
   onEmergencyContactClick: () => void;
+  rawDate?: string;
 }
 
 export const ThankYouView: React.FC<ThankYouViewProps> = ({
   language,
   onEmergencyContactClick,
+  rawDate,
 }) => {
   const t = translations[language];
-  const whatsappChannelUrl = 'https://whatsapp.com/channel/0029VaA123456789'; // Official WhatsApp channel link
+  const whatsappChannelUrl = getWhatsappChannelUrl(rawDate);
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center gap-[2.5vh] px-4 py-3 text-center animate-in fade-in duration-500">

@@ -4,19 +4,22 @@ import React from 'react';
 import Image from 'next/image';
 import { Language } from '@/types/flow';
 import { translations } from '@/lib/translations';
+import { getWhatsappChannelUrl } from '@/lib/whatsapp';
 import { CheckCircle2, ShieldAlert } from 'lucide-react';
 
 interface AlreadyRegisteredViewProps {
   language: Language;
   onEmergencyContactClick: () => void;
+  rawDate?: string;
 }
 
 export const AlreadyRegisteredView: React.FC<AlreadyRegisteredViewProps> = ({
   language,
   onEmergencyContactClick,
+  rawDate,
 }) => {
   const t = translations[language];
-  const whatsappChannelUrl = 'https://whatsapp.com/channel/0029VaA123456789';
+  const whatsappChannelUrl = getWhatsappChannelUrl(rawDate);
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col items-center justify-center gap-[2.5vh] px-4 py-3 text-center animate-in fade-in duration-500">

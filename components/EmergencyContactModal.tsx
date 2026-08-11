@@ -11,15 +11,14 @@ interface EmergencyContactModalProps {
 }
 
 const EMERGENCY_NUMBERS = [
-  { label: 'Hotline 1 (Coordinator)', number: '0771234567', display: '077 123 4567' },
-  { label: 'Hotline 2 (Support)', number: '0719876543', display: '071 987 6543' },
-  { label: 'Hotline 3 (Helpdesk)', number: '0765554321', display: '076 555 4321' },
+  { label: 'Hotline 1', number: '0786765115', display: '078 676 5115' },
+  { label: 'Hotline 2', number: '0786738624', display: '078 673 8624' },
 ];
 
 const WHATSAPP_CONTACT = {
   label: 'Official WhatsApp Helpdesk',
-  number: '94771234567',
-  display: '+94 77 123 4567',
+  number: '94752687114',
+  display: '075 268 7114',
 };
 
 export const EmergencyContactModal: React.FC<EmergencyContactModalProps> = ({
