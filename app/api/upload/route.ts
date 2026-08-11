@@ -55,12 +55,12 @@ export async function POST(request: Request) {
     const updateResult = await collection.findOneAndUpdate(
       {
         $or: [
-          { "GOLDEN PASS": goldenPass },
-          { "GOLDEN PASS": String(goldenPass) }
+          { goldenPass: goldenPass },
+          { goldenPass: String(goldenPass) }
         ]
       },
       {
-        $set: { "image url": publicUrl }
+        $set: { originalImage: publicUrl }
       },
       { returnDocument: 'after' }
     );

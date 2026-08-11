@@ -71,7 +71,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
   });
 
   // Check if object date is 17th August (case-insensitive check)
-  const rawDate = (user.rawInvitation?.["DATE"] || '').toString().toLowerCase().trim();
+  const rawDate = (user.rawInvitation?.eventDate || '').toString().toLowerCase().trim();
   const is17thAugust = rawDate.includes('17th aug') || rawDate.includes('17th august') || rawDate.includes('17 aug') || rawDate.includes('17 august');
 
   // Dynamic frame image selection (if date is 17th, force '/mp-dm-frame.png')
@@ -94,25 +94,25 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       if (resData.success && resData.data) {
         const doc: InvitationDocument = resData.data;
 
-        let rawPhone = (doc["MOBILE NUMBER"] || '').toString().trim().replace(/\D/g, '');
+        let rawPhone = (doc.mobileNumber || '').toString().trim().replace(/\D/g, '');
         if (rawPhone.length === 9 && rawPhone.startsWith('7')) {
           rawPhone = `0${rawPhone}`;
         }
 
         // Strictly check if the MongoDB document has a non-empty WHATSAPP NUMBER
-        const whatsappNum = (doc["WHATSAPP NUMBER"] || '').toString().trim();
+        const whatsappNum = (doc.waNumber || '').toString().trim();
         const hasWhatsappNumber = whatsappNum.length > 0;
 
         setIsAlreadyRegistered(hasWhatsappNumber);
 
         setUser({
-          name: doc["OWNER'S NAME"] || doc["BP Name"] || 'Valued Guest',
-          outletName: doc["OUTLET NAME"] || 'Exclusive Outlet',
-          code: doc["Outlet Code"] || doc["BP Code"] || doc["GOLDEN PASS"] || passNumber,
-          photo: (doc["image url"] && doc["image url"].trim().length > 0) ? doc["image url"].trim() : '/avatar.png',
+          name: doc.ownerName || doc.bpName || 'Valued Guest',
+          outletName: doc.outletName || 'Exclusive Outlet',
+          code: doc.outletCode || doc.bpCode || doc.goldenPass || passNumber,
+          photo: (doc.originalImage && doc.originalImage.trim().length > 0) ? doc.originalImage.trim() : '/avatar.png',
           phoneNumber: rawPhone,
           whatsappNumber: whatsappNum,
-          goldenPass: doc["GOLDEN PASS"] || passNumber,
+          goldenPass: doc.goldenPass || passNumber,
           rawInvitation: doc,
         });
       }

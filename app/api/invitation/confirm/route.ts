@@ -27,15 +27,16 @@ export async function POST(request: Request) {
     const updateResult = await collection.findOneAndUpdate(
       {
         $or: [
-          { "GOLDEN PASS": targetPass },
-          { "GOLDEN PASS": String(targetPass) }
+          { goldenPass: targetPass },
+          { goldenPass: String(targetPass) }
         ]
       },
       {
         $set: {
-          "WHATSAPP NUMBER": cleanWhatsapp,
-          "EXCLUSIVE EVEN CONFIRMATION": "CONFIRMED",
-          "updatedAt": new Date().toISOString()
+          waNumber: cleanWhatsapp,
+          waStatus: true,
+          isRegistered: true,
+          updatedAt: new Date().toISOString()
         }
       },
       { returnDocument: 'after' }

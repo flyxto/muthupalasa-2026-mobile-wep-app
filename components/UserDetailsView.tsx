@@ -36,7 +36,7 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   const currentWhatsappVal = user.whatsappNumber || '';
   
   // Check if the fetched MongoDB document has a valid, non-empty image URL
-  const fetchedImageUrl = user.rawInvitation?.["image url"]?.trim();
+  const fetchedImageUrl = user.rawInvitation?.originalImage?.trim();
 
   // Check if user currently has a valid non-fallback image
   const hasValidImage = Boolean(

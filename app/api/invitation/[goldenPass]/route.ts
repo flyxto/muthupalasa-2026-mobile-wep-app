@@ -19,11 +19,11 @@ export async function GET(
     const targetPass = goldenPass.trim();
     const collection = await getInvitationsCollection();
 
-    // Query invitation by "GOLDEN PASS"
+    // Query invitation by goldenPass
     const invitation = await collection.findOne({
       $or: [
-        { "GOLDEN PASS": targetPass },
-        { "GOLDEN PASS": String(targetPass) }
+        { goldenPass: targetPass },
+        { goldenPass: String(targetPass) }
       ]
     });
 
