@@ -30,6 +30,7 @@ export interface InvitationDocument {
   waStatus?: boolean;
   eventDate?: string;
   restricted?: boolean;
+  manualImageUpload?: boolean;
   createdAt?: string;
   updatedAt?: string | null;
   rawImage?: string;
@@ -44,5 +45,6 @@ export interface UserProfile {
   phoneNumber: string; // Original registered phone number from DB
   whatsappNumber: string; // User entered/confirmed WhatsApp number
   goldenPass?: string;
+  manualImageUpload?: boolean;
   rawInvitation?: InvitationDocument;
 }

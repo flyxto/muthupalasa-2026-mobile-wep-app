@@ -64,7 +64,8 @@ export async function POST(request: Request) {
       {
         $set: { 
           originalImage: publicUrl,
-          rawImage: publicUrl 
+          rawImage: publicUrl,
+          manualImageUpload: true
         }
       },
       { returnDocument: 'after' }

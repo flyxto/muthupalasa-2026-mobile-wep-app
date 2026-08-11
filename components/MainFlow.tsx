@@ -123,6 +123,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           phoneNumber: rawPhone,
           whatsappNumber: whatsappNum,
           goldenPass: doc["GOLDEN PASS"] || doc.goldenPass || passNumber,
+          manualImageUpload: doc.manualImageUpload === true,
           rawInvitation: doc,
         });
       }

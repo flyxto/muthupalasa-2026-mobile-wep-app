@@ -35,6 +35,9 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   // Strictly empty by default if not set by user
   const currentWhatsappVal = user.whatsappNumber || '';
   
+  // Check if manualImageUpload boolean is true (from user prop or user.rawInvitation)
+  const isManualUpload = Boolean(user.manualImageUpload || user.rawInvitation?.manualImageUpload);
+
   // Check if the fetched MongoDB document has a valid, non-empty image URL
   const fetchedImageUrl = user.rawInvitation?.originalImage?.trim();
 
@@ -44,8 +47,11 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
     (user.photo && user.photo.trim().length > 0 && user.photo.trim() !== '/avatar.png')
   );
 
-  // The upload button is only visible if there is NO valid image URL on the fetched object
+  // The central upload button is only visible if there is NO valid image URL
   const showUploadButton = !hasValidImage;
+
+  // The small corner re-upload button is shown if an image exists AND manualImageUpload is true
+  const showReuploadCornerButton = hasValidImage && isManualUpload;
 
   // Determine photo source: fetched image URL, uploaded photo URL, or default /avatar.png fallback
   const photoSrc = (user.photo && user.photo.trim().length > 0) ? user.photo.trim() : '/avatar.png';
@@ -158,6 +164,19 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
                 <span>Upload Photo</span>
               </button>
             </div>
+          )}
+
+          {/* Small Re-upload Corner Button (shown when manualImageUpload is true and valid image exists) */}
+          {showReuploadCornerButton && !isUploadingPhoto && !isImageLoading && (
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-2 right-2 z-50 p-2 rounded-full bg-navy-950/90 border border-gold-500/80 hover:border-gold-400 text-gold-400 shadow-lg backdrop-blur-md transition-all hover:scale-110 cursor-pointer flex items-center justify-center gap-1 group"
+              title="Re-upload Photo"
+              aria-label="Re-upload Photo"
+            >
+              <Upload className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-400 group-hover:text-gold-300" />
+            </button>
           )}
 
         </div>
