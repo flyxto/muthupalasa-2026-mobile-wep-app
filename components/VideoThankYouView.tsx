@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Language, ClubType } from '@/types/flow';
+import { CldVideoPlayer } from 'next-cloudinary';
+import 'next-cloudinary/dist/cld-video-player.css';
 
 interface VideoThankYouViewProps {
   language: Language;
@@ -51,11 +53,12 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in duration-300">
-      <video
+      <CldVideoPlayer
         src={videoUrl}
+        width="1080"
+        height="1920"
         className="w-full h-full object-cover"
-        autoPlay
-        playsInline
+        autoPlay="always"
         onEnded={onVideoEnded}
       />
     </div>
