@@ -294,6 +294,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
             language={language}
             onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
             rawDate={rawDate}
+            user={user}
           />
         ) : (
           <>
@@ -353,6 +354,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
                 language={language}
                 onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
                 rawDate={rawDate}
+                user={user}
               />
             )}
           </>
