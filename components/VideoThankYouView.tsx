@@ -50,25 +50,14 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
   const videoUrl = videoUrls[language] || videoUrls.en;
 
   return (
-    <div className="w-full flex-1 flex flex-col items-center justify-center p-2 select-none animate-in fade-in duration-300">
-      {/* Scaled Strict 9:16 Aspect Ratio Responsive Video Frame with Smooth Entrance */}
-      <div 
-        className="relative rounded-3xl overflow-hidden border-4 border-gold-500/80 bg-black shadow-[0_0_45px_rgba(212,175,55,0.45)] flex items-center justify-center shrink-0 animate-video-entrance"
-        style={{
-          aspectRatio: '9 / 16',
-          height: 'min(62svh, 500px)',
-          width: 'auto',
-          maxWidth: 'calc(100vw - 24px)',
-        }}
-      >
-        <video
-          src={videoUrl}
-          className="w-full h-full object-cover"
-          autoPlay
-          playsInline
-          onEnded={onVideoEnded}
-        />
-      </div>
+    <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in duration-300">
+      <video
+        src={videoUrl}
+        className="w-full h-full object-cover"
+        autoPlay
+        playsInline
+        onEnded={onVideoEnded}
+      />
     </div>
   );
 };
