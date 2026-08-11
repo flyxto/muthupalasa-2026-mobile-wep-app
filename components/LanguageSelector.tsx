@@ -32,9 +32,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         </h1>
         <div className="flex items-center justify-center gap-3 max-w-xs mx-auto pt-1">
           <div className="h-px bg-gold-600/40 flex-1"></div>
-          <span className="text-[clamp(0.6rem,1.4vh,0.75rem)] uppercase tracking-[0.25em] font-semibold text-gold-500/80">
+          {/* <span className="text-[clamp(0.6rem,1.4vh,0.75rem)] uppercase tracking-[0.25em] font-semibold text-gold-500/80">
             Muthupalasa 2026
-          </span>
+          </span> */}
           <div className="h-px bg-gold-600/40 flex-1"></div>
         </div>
       </div>

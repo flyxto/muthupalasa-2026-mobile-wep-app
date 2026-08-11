@@ -18,8 +18,8 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Muthupalasa 2026 - Mobile Web App",
-  description: "Scanned app outlet verification and multi-language user details portal",
+  title: "Muthupalasa 2026",
+  description: "Join us for an unforgettable experience",
 };
 
 export const viewport: Viewport = {

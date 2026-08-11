@@ -417,9 +417,9 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       )}
 
       {/* Footer */}
-      <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
+      {/* <footer className="w-full text-center py-1 text-[9px] sm:text-[10px] text-gold-500/70 shrink-0 relative z-10 tracking-widest uppercase font-semibold">
         Muthupalasa 2026
-      </footer>
+      </footer> */}
     </div>
   );
 };
