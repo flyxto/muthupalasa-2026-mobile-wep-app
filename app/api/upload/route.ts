@@ -60,7 +60,10 @@ export async function POST(request: Request) {
         ]
       },
       {
-        $set: { originalImage: publicUrl }
+        $set: { 
+          originalImage: publicUrl,
+          rawImage: publicUrl 
+        }
       },
       { returnDocument: 'after' }
     );

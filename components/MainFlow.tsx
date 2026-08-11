@@ -110,6 +110,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           const savedPhoto = localStorage.getItem(`mock_photo_${passNumber}`);
           if (savedPhoto) {
             doc.originalImage = savedPhoto;
+            doc.rawImage = savedPhoto;
           }
           const savedWa = localStorage.getItem(`mock_wa_${passNumber}`);
           if (savedWa) {

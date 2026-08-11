@@ -32,6 +32,7 @@ export interface InvitationDocument {
   restricted?: boolean;
   createdAt?: string;
   updatedAt?: string | null;
+  rawImage?: string;
   [key: string]: any;
 }
 
