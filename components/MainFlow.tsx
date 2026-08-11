@@ -9,6 +9,7 @@ import { AlreadyRegisteredView } from '@/components/AlreadyRegisteredView';
 import { EmergencyContactModal } from '@/components/EmergencyContactModal';
 import { VideoThankYouView } from '@/components/VideoThankYouView';
 import { ThankYouView } from '@/components/ThankYouView';
+import { ThreeLogosView } from '@/components/ThreeLogosView';
 import { AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 
 const PARTICLES = Array.from({ length: 45 }, (_, i) => ({
@@ -27,9 +28,9 @@ interface MainFlowProps {
 
 const getFrameImage = (club: ClubType, is17th: boolean): string => {
   // If date is 17th August, always show '/mp-dm-frame.png'
-  if (is17th) return '/mp-dm-frame.png';
-  if (club === 'starclub') return '/sc-frame.png';
-  return '/mp-dm-frame.png';
+  if (is17th) return '/mp-dm-frame.webp';
+  if (club === 'starclub') return '/sc-frame.webp';
+  return '/mp-dm-frame.webp'; // Default frame for 'mp' and 'dmart'
 };
 
 const getLogoImage = (club: ClubType): string => {
@@ -203,6 +204,10 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       setStep('video');
     }
   };
+
+  if (!goldenPass) {
+    return <ThreeLogosView />;
+  }
 
   return (
     <div className="min-h-svh max-h-svh h-svh bg-navy-800 text-gold-400 font-sans px-3 sm:px-6 py-2 sm:py-3 relative overflow-hidden flex flex-col items-center justify-between select-none">

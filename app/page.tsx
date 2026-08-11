@@ -1,6 +1,7 @@
 import React from 'react';
-import { MainFlow } from '@/components/MainFlow';
+import { ThreeLogosView } from '@/components/ThreeLogosView';
 
 export default function Home() {
-  return <MainFlow />;
+  return <ThreeLogosView />;
 }
+
