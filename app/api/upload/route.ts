@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { r2Client, R2_BUCKET_NAME, R2_PUBLIC_URL } from '@/lib/r2';
+import { getInvitationsCollection } from '@/lib/mongodb';
 
 export async function POST(request: Request) {
   try {
@@ -49,17 +50,28 @@ export async function POST(request: Request) {
     // Public URL
     const publicUrl = `${R2_PUBLIC_URL}/${key}`;
 
-    // Temporarily bypass MongoDB
+    // Update MongoDB invitation object
+    const collection = await getInvitationsCollection();
+    const updateResult = await collection.findOneAndUpdate(
+      {
+        $or: [
+          { goldenPass: goldenPass },
+          { goldenPass: String(goldenPass) }
+        ]
+      },
+      {
+        $set: { originalImage: publicUrl }
+      },
+      { returnDocument: 'after' }
+    );
+
     return NextResponse.json({
       success: true,
       imageUrl: publicUrl,
-      data: {
-        goldenPass: goldenPass,
-        originalImage: publicUrl,
-      },
+      data: updateResult?.value || updateResult,
     });
   } catch (error: any) {
-    console.error('Error uploading image to R2 / updating Mock DB:', error);
+    console.error('Error uploading image to R2 / updating MongoDB:', error);
     return NextResponse.json(
       { error: 'Failed to upload image', message: error?.message },
       { status: 500 }

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getInvitationsCollection } from '@/lib/mongodb';
 
 export async function POST(request: Request) {
   try {
@@ -22,22 +23,34 @@ export async function POST(request: Request) {
     const targetPass = goldenPass.toString().trim();
     const cleanWhatsapp = whatsappNumber.toString().trim();
 
-    // Temporarily bypass MongoDB
+    const collection = await getInvitationsCollection();
+    const updateResult = await collection.findOneAndUpdate(
+      {
+        $or: [
+          { goldenPass: targetPass },
+          { goldenPass: String(targetPass) }
+        ]
+      },
+      {
+        $set: {
+          waNumber: cleanWhatsapp,
+          waStatus: true,
+          isRegistered: true,
+          updatedAt: new Date().toISOString()
+        }
+      },
+      { returnDocument: 'after' }
+    );
+
     return NextResponse.json({
       success: true,
-      message: 'Mock: WhatsApp number successfully posted (DB Bypassed)',
-      data: {
-        goldenPass: targetPass,
-        waNumber: cleanWhatsapp,
-        waStatus: true,
-        isRegistered: true,
-        updatedAt: new Date().toISOString()
-      },
+      message: 'WhatsApp number successfully posted to MongoDB!',
+      data: updateResult?.value || updateResult,
     });
   } catch (error: any) {
-    console.error('Error in mock API:', error);
+    console.error('Error updating WhatsApp number in MongoDB:', error);
     return NextResponse.json(
-      { error: 'Failed to update (Mock)', message: error?.message },
+      { error: 'Failed to update database', message: error?.message },
       { status: 500 }
     );
   }
