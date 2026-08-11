@@ -17,38 +17,46 @@ if (!process.env.MONGODB_URI) {
   }
 }
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI" in .env.local');
-}
-
-const uri = process.env.MONGODB_URI;
-const options: MongoClientOptions = {};
-
 let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+let clientPromise: Promise<MongoClient> | null = null;
 
-if (process.env.NODE_ENV === "development") {
-  let globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
+function getClientPromise(): Promise<MongoClient> {
+  if (clientPromise) return clientPromise;
 
-  if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    globalWithMongo._mongoClientPromise = client.connect();
+  if (!process.env.MONGODB_URI) {
+    throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
   }
-  clientPromise = globalWithMongo._mongoClientPromise;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+  const uri = process.env.MONGODB_URI;
+  const options: MongoClientOptions = {};
+
+  if (process.env.NODE_ENV === "development") {
+    let globalWithMongo = global as typeof globalThis & {
+      _mongoClientPromise?: Promise<MongoClient>;
+    };
+
+    if (!globalWithMongo._mongoClientPromise) {
+      client = new MongoClient(uri, options);
+      globalWithMongo._mongoClientPromise = client.connect();
+    }
+    clientPromise = globalWithMongo._mongoClientPromise;
+  } else {
+    client = new MongoClient(uri, options);
+    clientPromise = client.connect();
+  }
+  
+  return clientPromise;
 }
 
-export default clientPromise;
+export { getClientPromise };
+
+// Keep the default export but make it a getter or just export the function if needed, 
+// though exporting the promise directly was the old way. We can export a proxy or just update getDb to use getClientPromise.
 
 export const DEFAULT_DB_NAME = process.env.MONGODB_DB || "muthupalasa";
 export const INVITATIONS_COLLECTION = process.env.MONGODB_COLLECTION || "mp-hambanthota-invitation";
 
 export async function getDb(dbName: string = process.env.MONGODB_DB || DEFAULT_DB_NAME): Promise<Db> {
-  const client = await clientPromise;
+  const client = await getClientPromise();
   return client.db(dbName);
 }
 

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import clientPromise, { DEFAULT_DB_NAME, INVITATIONS_COLLECTION } from "../lib/mongodb";
+import { getClientPromise, DEFAULT_DB_NAME, INVITATIONS_COLLECTION } from "../lib/mongodb";
 
 const DB_NAME = process.env.MONGODB_DB || DEFAULT_DB_NAME;
 const COLLECTION_NAME = process.env.MONGODB_COLLECTION || INVITATIONS_COLLECTION;
@@ -23,7 +23,7 @@ async function seedDatabase() {
 
     console.log(`📂 Read ${documents.length} records from data/invitations.json`);
 
-    const client = await clientPromise;
+    const client = await getClientPromise();
     const db = client.db(DB_NAME);
     const collection = db.collection(COLLECTION_NAME);
 

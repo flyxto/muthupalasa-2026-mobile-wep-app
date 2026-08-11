@@ -1,4 +1,4 @@
-import clientPromise, { DEFAULT_DB_NAME, INVITATIONS_COLLECTION } from "../lib/mongodb";
+import { getClientPromise, DEFAULT_DB_NAME, INVITATIONS_COLLECTION } from "../lib/mongodb";
 
 const DB_NAME = process.env.MONGODB_DB || DEFAULT_DB_NAME;
 const COLLECTION_NAME = process.env.MONGODB_COLLECTION || INVITATIONS_COLLECTION;
@@ -9,7 +9,7 @@ async function testConnection() {
   console.log(`URI: ${maskedUri}`);
 
   try {
-    const client = await clientPromise;
+    const client = await getClientPromise();
     console.log("✅ MongoClient successfully connected!");
 
     const db = client.db(DB_NAME);
