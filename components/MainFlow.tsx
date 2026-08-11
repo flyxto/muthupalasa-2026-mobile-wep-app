@@ -87,12 +87,39 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
     setFetchError(null);
     try {
       const res = await fetch(`/api/invitation/${passNumber}`);
+      
+      let errorMsg = `Invitation pass "${passNumber}" not found.`;
+      
       if (!res.ok) {
-        throw new Error(`Invitation pass "${passNumber}" not found.`);
+        try {
+          const errorData = await res.json();
+          if (errorData.error) errorMsg = errorData.error;
+          if (errorData.message) errorMsg += ` (${errorData.message})`;
+        } catch (e) {
+          // ignore json parse error
+        }
+        throw new Error(errorMsg);
       }
+      
       const resData = await res.json();
       if (resData.success && resData.data) {
         const doc: InvitationDocument = resData.data;
+
+        // Apply any local storage overrides
+        try {
+          const savedPhoto = localStorage.getItem(`mock_photo_${passNumber}`);
+          if (savedPhoto) {
+            doc.originalImage = savedPhoto;
+          }
+          const savedWa = localStorage.getItem(`mock_wa_${passNumber}`);
+          if (savedWa) {
+            doc.waNumber = savedWa;
+            doc.waStatus = true;
+            doc.isRegistered = true;
+          }
+        } catch (e) {
+          // ignore localStorage errors
+        }
 
         let rawPhone = (doc.mobileNumber || '').toString().trim().replace(/\D/g, '');
         if (rawPhone.length === 9 && rawPhone.startsWith('7')) {
@@ -156,6 +183,15 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         throw new Error(data.error || 'Failed to upload photo to Cloudflare R2');
       }
 
+      // Save to localStorage for mock persistence
+      try {
+        if (data.imageUrl) {
+          localStorage.setItem(`mock_photo_${targetPass}`, data.imageUrl);
+        }
+      } catch (e) {
+        // ignore
+      }
+
       // Refetch invitation data from MongoDB to update UI without page reload
       await fetchInvitationData(targetPass);
     } catch (err: any) {
@@ -185,6 +221,13 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         const data = await res.json();
         if (!res.ok || !data.success) {
           console.warn('MongoDB confirm update warning:', data.error);
+        } else {
+          // Save to localStorage for mock persistence
+          try {
+            localStorage.setItem(`mock_wa_${targetPass}`, whatsappNumber);
+          } catch (e) {
+            // ignore
+          }
         }
       }
     } catch (err: any) {
