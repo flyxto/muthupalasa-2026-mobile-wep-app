@@ -33,6 +33,11 @@ function getClientPromise(): Promise<MongoClient> {
   if (uri.startsWith("'") && uri.endsWith("'")) uri = uri.slice(1, -1);
   uri = uri.trim();
 
+  // If the user accidentally pasted "MONGODB_URI=" inside the Vercel value field, strip it out
+  if (uri.startsWith('MONGODB_URI=')) {
+    uri = uri.replace('MONGODB_URI=', '').trim();
+  }
+
   if (!uri.startsWith("mongodb://") && !uri.startsWith("mongodb+srv://")) {
     throw new Error(`The MONGODB_URI is invalid (does not start with mongodb:// or mongodb+srv://). It currently starts with: "${uri.substring(0, 15)}..."`);
   }
