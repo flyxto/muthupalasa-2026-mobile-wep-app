@@ -13,7 +13,7 @@ const MOCK_OBJECTS = [
     "mobileNumber": "784700800",
     "hotel": "SHANGRI-LA HAMBANTOTA",
     "goldenPass": "0233",
-    "originalImage": "https://res.cloudinary.com/dacskh1vb/image/upload/v1749653479/lightx-temp/temp-1749653476850.jpg",
+    "originalImage": "https://res.cloudinary.com/dacskh1vb/image/upload/v1749654071/muthupalasa-2025/652780229V-1749654061970.png",
     "isWinner": false,
     "isAttended": false,
     "processedImage": "",
