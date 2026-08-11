@@ -41,7 +41,7 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
       };
     } else if (clubType === 'starclub') {
       videoUrls = {
-        en: defaultVideoUrls.en, // User didn't specify 19th SC English, fallback to default English
+        en: 'https://res.cloudinary.com/dacskh1vb/video/upload/v1786423349/19_SC_English_ctvleq.mp4',
         si: 'https://res.cloudinary.com/dacskh1vb/video/upload/v1786423001/19_SC_Sinhala_01_vn0y9u.mp4',
       };
     }
