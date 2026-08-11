@@ -84,6 +84,34 @@ const MOCK_OBJECTS = [
     "restricted": false,
     "createdAt": "2026-08-10T16:11:40.150Z",
     "updatedAt": null
+  },
+  {
+    "loyaltyClub": "DMART",
+    "area": "CENTRAL 1",
+    "classification": "ELITE",
+    "bpCode": "803566",
+    "bpName": "803566 : HETTIGE CONSORTIUM",
+    "outletCode": "T1001010033369",
+    "outletName": "NIYARAPOLA STORES",
+    "ownerName": "N.R.D.A.M.K.C.NIYAREPOLA",
+    "mobileNumber": "772185508",
+    "hotel": "SHANGRI-LA HAMBANTOTA",
+    "goldenPass": "0144",
+    "originalImage": "https://res.cloudinary.com/vccpsacloud/image/upload/v1755786760/b7sr2mo3gay3rwx4hwew.jpg",
+    "isWinner": false,
+    "isAttended": false,
+    "processedImage": "",
+    "archiveOriginalImage": [""],
+    "archiveProcessedImage": [""],
+    "eventName": "EXCLUSIVE EVENT HAMBANTOTA",
+    "award": "No",
+    "isRegistered": false,
+    "waNumber": "",
+    "waStatus": false,
+    "eventDate": "17TH AUG 2026",
+    "restricted": false,
+    "createdAt": "2026-08-10T16:11:40.150Z",
+    "updatedAt": null
   }
 ];
 
