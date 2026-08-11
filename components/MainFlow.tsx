@@ -376,6 +376,8 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
               <VideoThankYouView
                 language={language}
                 onVideoEnded={() => setStep('thankyou')}
+                rawDate={rawDate}
+                clubType={activeClub}
               />
             )}
 
