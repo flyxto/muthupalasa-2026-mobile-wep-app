@@ -18,6 +18,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4 MB
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: 'Image size exceeds 4 MB. Please upload a smaller photo.' },
+        { status: 400 }
+      );
+    }
+
     if (!goldenPass) {
       return NextResponse.json(
         { error: 'Golden Pass identifier is required' },
@@ -65,7 +73,8 @@ export async function POST(request: Request) {
         $set: { 
           originalImage: publicUrl,
           rawImage: publicUrl,
-          manualImageUpload: true
+          manualImageUpload: true,
+          ManualimageStatus: 'pending'
         }
       },
       { returnDocument: 'after' }

@@ -86,6 +86,13 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const MAX_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB limit
+      if (file.size > MAX_SIZE_BYTES) {
+        setErrorMsg(t.imageTooLargeErr || 'Image size exceeds 4 MB. Please select a smaller photo.');
+        e.target.value = '';
+        return;
+      }
+      setErrorMsg(null);
       setIsImageLoading(true);
       onUploadPhotoFile(file);
     }
@@ -182,13 +189,18 @@ export const UserDetailsView: React.FC<UserDetailsViewProps> = ({
         </div>
       </div>
 
-      {/* Helper text if image is missing - single line formatting */}
-      {!hasValidImage && !isUploadingPhoto && (
+      {/* Helper text or error banner below photo container */}
+      {errorMsg ? (
+        <div className="w-full text-center px-3 py-1 bg-rose-950/80 border border-rose-500/60 rounded-xl text-[clamp(0.6rem,1.3vh,0.78rem)] font-semibold text-rose-300 flex items-center justify-center gap-1.5 shadow-sm animate-in fade-in duration-200 whitespace-normal break-words">
+          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          <span>{errorMsg}</span>
+        </div>
+      ) : !hasValidImage && !isUploadingPhoto ? (
         <div className="w-full text-center px-2 py-0.5 sm:py-1 bg-navy-950/80 border border-gold-500/40 rounded-xl text-[clamp(0.58rem,1.3vh,0.75rem)] font-semibold text-gold-400 flex items-center justify-center gap-1 shadow-sm animate-in fade-in duration-200 whitespace-nowrap overflow-hidden">
           <AlertCircle className="w-3 h-3 text-gold-500 shrink-0" />
           <span className="truncate">{t.uploadRequiredErr}</span>
         </div>
-      )}
+      ) : null}
 
       {/* User Information */}
       <div className="w-full space-y-0.5 text-center px-1">

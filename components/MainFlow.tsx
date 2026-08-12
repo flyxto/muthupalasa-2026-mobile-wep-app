@@ -124,6 +124,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           whatsappNumber: whatsappNum,
           goldenPass: doc["GOLDEN PASS"] || doc.goldenPass || passNumber,
           manualImageUpload: doc.manualImageUpload === true,
+          ManualimageStatus: doc.ManualimageStatus || doc.manualImageStatus || undefined,
           rawInvitation: doc,
         });
       }
@@ -148,6 +149,12 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
 
   // Upload photo file directly to Cloudflare R2 bucket, update MongoDB, and refetch without refresh
   const handleUploadPhotoFile = async (file: File) => {
+    const MAX_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB limit
+    if (file.size > MAX_SIZE_BYTES) {
+      alert('Image size exceeds 4 MB. Please select a smaller photo.');
+      return;
+    }
+
     const targetPass = user.goldenPass || goldenPass || user.code;
     if (!targetPass) return;
 

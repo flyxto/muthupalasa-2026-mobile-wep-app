@@ -21,10 +21,18 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
   const t = translations[language];
 
   const [photo, setPhoto] = useState(user.photo);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const MAX_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB limit
+      if (file.size > MAX_SIZE_BYTES) {
+        setErrorMsg(t.imageTooLargeErr || 'Image size exceeds 4 MB. Please select a smaller photo.');
+        e.target.value = '';
+        return;
+      }
+      setErrorMsg(null);
       const reader = new FileReader();
       reader.onloadend = () => {
         if (reader.result) {
@@ -90,6 +98,9 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
               <span>{t.uploadPhoto}</span>
               <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
             </label>
+            {errorMsg && (
+              <p className="text-xs text-rose-400 font-semibold text-center mt-1 animate-in fade-in duration-200">{errorMsg}</p>
+            )}
           </div>
 
           {/* Read-Only Name */}

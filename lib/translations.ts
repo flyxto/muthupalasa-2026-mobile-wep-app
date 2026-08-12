@@ -18,6 +18,7 @@ export interface TranslationDictionary {
   emergencyModalSubtitle: string;
   phoneRequiredErr: string;
   uploadRequiredErr: string;
+  imageTooLargeErr?: string;
   alreadyRegisteredTitle: string;
   alreadyRegisteredSubtitle: string;
   emergencyContactNote: string;
@@ -54,6 +55,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     emergencyModalSubtitle: 'Need urgent assistance? Contact our team directly:',
     phoneRequiredErr: 'Enter a valid 10-digit WhatsApp number starting with 07',
     uploadRequiredErr: 'Please upload an image to continue.',
+    imageTooLargeErr: 'Image size exceeds 4 MB. Please select a smaller photo.',
     alreadyRegisteredTitle: 'Already Registered',
     alreadyRegisteredSubtitle: 'You have already confirmed your invitation for this event. Join our official WhatsApp channel for event updates.',
     emergencyContactNote: 'Emergency Contact For Issues: ',
@@ -88,6 +90,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     emergencyModalSubtitle: 'ඔබට හදිසි සහයක් අවශ්‍යද? අපගේ කණ්ඩායම අමතන්න:',
     phoneRequiredErr: 'අංක 10කින් යුත් නිවැරදි 07X WhatsApp අංකයක් ඇතුළත් කරන්න',
     uploadRequiredErr: 'ඉදිරියට යාමට ඡායාරූපයක් එක් කරන්න.',
+    imageTooLargeErr: 'ඡායාරූපයේ ප්‍රමාණය MB 4 ට වඩා වැඩි විය නොහැක. කරුණාකර කුඩා ඡායාරූපයක් තෝරන්න.',
     alreadyRegisteredTitle: 'දැනටමත් ලියාපදිංචි වී ඇත',
     alreadyRegisteredSubtitle: 'ඔබගේ ආරාධනාව දැනටමත් තහවුරු කර ඇත. උත්සවයේ අලුත්ම තොරතුරු සඳහා අපගේ නිල WhatsApp චැනලයට එකතු වන්න.',
     emergencyContactNote: 'හදිසි සහාය සදහා ඇමතුම් අංකය: ',
