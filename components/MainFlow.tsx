@@ -6,6 +6,7 @@ import { FlowStep, Language, UserProfile, InvitationDocument, ClubType } from '@
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { UserDetailsView } from '@/components/UserDetailsView';
 import { AlreadyRegisteredView } from '@/components/AlreadyRegisteredView';
+import { RejectedImageUploadView } from '@/components/RejectedImageUploadView';
 import { EmergencyContactModal } from '@/components/EmergencyContactModal';
 import { VideoThankYouView } from '@/components/VideoThankYouView';
 import { ThankYouView } from '@/components/ThankYouView';
@@ -54,6 +55,8 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
   const [language, setLanguage] = useState<Language>('en');
   const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState<boolean>(false);
   const [isAlreadyRegistered, setIsAlreadyRegistered] = useState<boolean>(false);
+  const [isImageRejected, setIsImageRejected] = useState<boolean>(false);
+  const [showUploadSuccess, setShowUploadSuccess] = useState<boolean>(false);
 
   // Loading & error state for fetching MongoDB invitation data
   const [isLoading, setIsLoading] = useState<boolean>(!!goldenPass);
@@ -111,7 +114,11 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
         const whatsappNum = (doc["WHATSAPP NUMBER"] || doc.waNumber || '').toString().trim();
         const hasWhatsappNumber = whatsappNum.length > 0;
 
+        const imageStatus = (doc.ManualimageStatus || doc.manualImageStatus || '').toString().toLowerCase().trim();
+        const isRejected = imageStatus === 'rejected' || imageStatus === 'reject' || imageStatus.startsWith('reject');
+
         setIsAlreadyRegistered(hasWhatsappNumber);
+        setIsImageRejected(hasWhatsappNumber && isRejected);
 
         setUser({
           name: doc["OWNER'S NAME"] || doc["BP Name"] || doc.ownerName || doc.bpName || 'Valued Guest',
@@ -176,6 +183,15 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
 
       // Refetch invitation data from MongoDB to update UI without page reload
       await fetchInvitationData(targetPass);
+
+      // If the user was in the rejected image upload flow, show success banner then transition to AlreadyRegisteredView
+      if (isImageRejected) {
+        setShowUploadSuccess(true);
+        setTimeout(() => {
+          setShowUploadSuccess(false);
+          setIsImageRejected(false);
+        }, 2500);
+      }
     } catch (err: any) {
       console.error('Image upload failed:', err);
       alert(`Photo upload failed: ${err.message || 'Server error'}`);
@@ -302,7 +318,16 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
 
       {/* Main Content Area */}
       <main className="w-full max-w-md mx-auto flex-1 flex items-center justify-center overflow-y-auto relative z-10 my-auto py-1">
-        {isAlreadyRegistered ? (
+        {isAlreadyRegistered && (isImageRejected || showUploadSuccess) ? (
+          <RejectedImageUploadView
+            user={user}
+            language={language}
+            onUploadPhotoFile={handleUploadPhotoFile}
+            isUploadingPhoto={isUploadingPhoto}
+            uploadSuccess={showUploadSuccess}
+            onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
+          />
+        ) : isAlreadyRegistered ? (
           <AlreadyRegisteredView
             language={language}
             onEmergencyContactClick={() => setIsEmergencyModalOpen(true)}
