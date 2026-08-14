@@ -11,7 +11,7 @@ interface EmergencyContactModalProps {
 }
 
 const EMERGENCY_NUMBERS = [
-  { label: 'Hotline 1', number: '0786765115', display: '078 676 5115' },
+  { label: 'Hotline 1', number: '0752687114', display: '075 268 7114' },
   { label: 'Hotline 2', number: '0786738624', display: '078 673 8624' },
 ];
 

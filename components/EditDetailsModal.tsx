@@ -163,7 +163,7 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
       </div>
 
       {/* Hotline Notice Outside of Modal */}
-      <div className={`mt-4 text-center z-10 px-4 ${isClosing ? 'animate-modal-backdrop-out' : 'animate-in fade-in slide-in-from-bottom-4 duration-400 delay-150'}`}>
+      {/* <div className={`mt-4 text-center z-10 px-4 ${isClosing ? 'animate-modal-backdrop-out' : 'animate-in fade-in slide-in-from-bottom-4 duration-400 delay-150'}`}>
         <p className="text-sm sm:text-base text-gold-400 font-bold tracking-wide flex items-center justify-center gap-2 flex-wrap drop-shadow-sm">
           <span>{t.emergencyContactNote || 'Hotline For Issues :'}</span>
           <a
@@ -173,7 +173,7 @@ export const EditDetailsModal: React.FC<EditDetailsModalProps> = ({
             0786222222
           </a>
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };
