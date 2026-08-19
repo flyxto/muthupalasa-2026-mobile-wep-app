@@ -125,7 +125,6 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
           outletName: doc["OUTLET NAME"] || doc.outletName || 'Exclusive Outlet',
           code: doc["Outlet Code"] || doc["BP Code"] || doc["GOLDEN PASS"] || doc.outletCode || doc.bpCode || doc.goldenPass || passNumber,
           photo: (doc["image url"] && doc["image url"].trim().length > 0) ? doc["image url"].trim() :
-            (doc.processedImage && doc.processedImage.trim().length > 0) ? doc.processedImage.trim() :
               (doc.originalImage && doc.originalImage.trim().length > 0) ? doc.originalImage.trim() : '/avatar.png',
           phoneNumber: rawPhone,
           whatsappNumber: whatsappNum,
