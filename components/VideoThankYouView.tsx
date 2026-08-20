@@ -33,7 +33,7 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
   if (d.includes('31') || d.includes('31st')) {
     // August 31st
     videoUrls = {
-      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787231118/31_MP_Sinhala_01_wovzwv.mp4',
+      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787233852/31_MPenglish_zeghb5.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787231118/31_MP_Sinhala_01_wovzwv.mp4',
     };
   } else if (d.includes('19')) {
@@ -59,19 +59,19 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
       si: 'https://res.cloudinary.com/dacskh1vb/video/upload/v1786422779/17_Sinhala_06_lnm0gp.mp4',
     };
   } else if (d.includes('16')) {
-    // September 16th
+    // September 16th (Sinhala for both languages)
     videoUrls = {
       en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230170/S_16_MP_vcnym5.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230170/S_16_MP_vcnym5.mp4',
     };
   } else if (d.includes('15')) {
-    // September 15th
+    // September 15th (Sinhala for both languages)
     videoUrls = {
       en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230313/S_15_MP_wcdg2p.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230313/S_15_MP_wcdg2p.mp4',
     };
   } else if (d.includes('14')) {
-    // September 14th
+    // September 14th (Sinhala for both languages)
     if (isStarClub) {
       videoUrls = {
         en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230390/S_14_SC_btcfqo.mp4',
@@ -85,7 +85,7 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
       };
     }
   } else if (d.includes('08') || d.includes('8th') || /\b8\b/.test(d)) {
-    // September 08th
+    // September 08th (Sinhala for both languages)
     if (isStarClub) {
       videoUrls = {
         en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230714/S_08_SC_akah2j.mp4',
@@ -99,7 +99,7 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
       };
     }
   } else if (d.includes('07') || d.includes('7th') || /\b7\b/.test(d)) {
-    // September 07th
+    // September 07th (Sinhala for both languages)
     videoUrls = {
       en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230812/S_07_MP_e6d0wz.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230812/S_07_MP_e6d0wz.mp4',
@@ -108,26 +108,26 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
     // September 03rd
     if (isStarClub) {
       videoUrls = {
-        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230926/S_03_SC_yvfsbb.mp4',
+        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787233845/S_03_SC_english_w7gqoh.mp4',
         si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230926/S_03_SC_yvfsbb.mp4',
       };
     } else {
       // dmart or default
       videoUrls = {
-        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230958/S_03_Dmart_p1yoyw.mp4',
+        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787233851/S_03_Dmart_English_d09nxg.mp4',
         si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230958/S_03_Dmart_p1yoyw.mp4',
       };
     }
   } else if (d.includes('02') || d.includes('2nd') || /\b2\b/.test(d)) {
     // September 02nd
     videoUrls = {
-      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787231005/S_02_MP_Sinhala_py4otr.mp4',
+      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787233841/S_02_MP_English_ehm6it.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787231005/S_02_MP_Sinhala_py4otr.mp4',
     };
   } else if (d.includes('01') || d.includes('1st') || /\b1\b/.test(d)) {
     // September 01st
     videoUrls = {
-      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787231083/S_01_Sinhala_Clip_o9abky.mp4',
+      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787233805/S_01_english_Clip_kzled0.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787231083/S_01_Sinhala_Clip_o9abky.mp4',
     };
   }
