@@ -224,7 +224,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
       console.error('Error submitting WhatsApp number to MongoDB:', err);
     } finally {
       setIsConfirming(false);
-      setStep('thankyou');
+      setStep('video');
     }
   };
 
