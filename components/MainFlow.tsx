@@ -383,6 +383,7 @@ export const MainFlow: React.FC<MainFlowProps> = ({ goldenPass, clubType }) => {
                 onVideoEnded={() => setStep('thankyou')}
                 rawDate={rawDate}
                 clubType={activeClub}
+                loyaltyClub={user.rawInvitation?.loyaltyClub || user.rawInvitation?.["LOYALTY CLUB"] || user.rawInvitation?.["Loyalty Club"] || ''}
               />
             )}
 
