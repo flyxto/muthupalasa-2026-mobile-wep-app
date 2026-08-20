@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Language, UserProfile } from '@/types/flow';
 import { translations } from '@/lib/translations';
-import { getWhatsappChannelUrl } from '@/lib/whatsapp';
+import { getWhatsappChannelUrl, formatDisplayDate } from '@/lib/whatsapp';
 import { CheckCircle2, ShieldAlert, Calendar, Clock, MapPin } from 'lucide-react';
 
 interface AlreadyRegisteredViewProps {
@@ -33,17 +33,8 @@ export const AlreadyRegisteredView: React.FC<AlreadyRegisteredViewProps> = ({
     ''
   ).toString().trim();
 
-  let displayDate = rawDateStr;
-  const lowerDate = displayDate.toLowerCase();
-  if (lowerDate.includes('17')) {
-    displayDate = '17th August 2026';
-  } else if (lowerDate.includes('18')) {
-    displayDate = '18th August 2026';
-  } else if (lowerDate.includes('19')) {
-    displayDate = '19th August 2026';
-  } else if (!displayDate) {
-    displayDate = '17th August 2026';
-  }
+  const displayDate = formatDisplayDate(rawDateStr);
+
 
   const rawVenue = (
     user?.rawInvitation?.["HOTEL"] ||
