@@ -71,49 +71,49 @@ export const VideoThankYouView: React.FC<VideoThankYouViewProps> = ({
       si: 'https://res.cloudinary.com/dacskh1vb/video/upload/v1786422779/17_Sinhala_06_lnm0gp.mp4',
     };
   } else if (day === 16) {
-    // September 16th (Sinhala for both languages)
+    // September 16th
     videoUrls = {
-      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230170/S_16_MP_vcnym5.mp4',
+      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297904/S_16_MP_English_x7bdci.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230170/S_16_MP_vcnym5.mp4',
     };
   } else if (day === 15) {
-    // September 15th (Sinhala for both languages)
+    // September 15th
     videoUrls = {
-      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230313/S_15_MP_wcdg2p.mp4',
+      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297908/S_15_MP_English_pdfu2y.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230313/S_15_MP_wcdg2p.mp4',
     };
   } else if (day === 14) {
-    // September 14th (Sinhala for both languages)
+    // September 14th
     if (isStarClub) {
       videoUrls = {
-        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230390/S_14_SC_btcfqo.mp4',
+        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297884/S_14_SC_english_hmy0eo.mp4',
         si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230390/S_14_SC_btcfqo.mp4',
       };
     } else {
       // dmart or default
       videoUrls = {
-        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230626/S_14_Dmart_dl0j4q.mp4',
+        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297896/S_14_Dmart_English_lafg8o.mp4',
         si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230626/S_14_Dmart_dl0j4q.mp4',
       };
     }
   } else if (day === 8) {
-    // September 08th (Sinhala for both languages)
+    // September 08th
     if (isStarClub) {
       videoUrls = {
-        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230714/S_08_SC_akah2j.mp4',
+        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297534/S_08_SC_English_grsuyq.mp4',
         si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230714/S_08_SC_akah2j.mp4',
       };
     } else {
       // dmart or default
       videoUrls = {
-        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230783/S_08_Dmart_ocktar.mp4',
+        en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297539/S_08_Dmart_english_o0omga.mp4',
         si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230783/S_08_Dmart_ocktar.mp4',
       };
     }
   } else if (day === 7) {
-    // September 07th (Sinhala for both languages)
+    // September 07th
     videoUrls = {
-      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230812/S_07_MP_e6d0wz.mp4',
+      en: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787297539/S_07_MP_english_xzc5my.mp4',
       si: 'https://res.cloudinary.com/vccpsacloud/video/upload/v1787230812/S_07_MP_e6d0wz.mp4',
     };
   } else if (day === 3) {
